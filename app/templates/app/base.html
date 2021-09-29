@@ -1,0 +1,32 @@
+{% load static %}
+
+<! DOCTYPE html>
+<html>
+<head>
+  <title>e-Problems</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"
+</head>
+
+<body>
+  <header>
+    <div class="header-left">
+      <h1><a class="title" href="{% url 'app:index' %}">e-Problems</h1>
+    </div>
+    <div class="header-menu">
+        {% if request.user.is_authenticated %}
+          <ul>
+            <li><a href="{% url 'app:user' request.user.id %}">マイページへ</a></li>
+            <a href="{% url 'app:logout' %}">ログアウト</a>
+          </ul>
+        {% else %}
+            <a href="{% url 'app:signup' %}">新規作成</a>
+            <a href="{% url 'app:login' %}">ログイン</a>
+        {% endif %}
+    </div>
+  </header>
+
+      {% block content %}
+      {% endblock %}
+
+  
+</body>

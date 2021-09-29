@@ -1,0 +1,23 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+  <div class="explain-part">
+    <h1>最先端の問題集をポケットに</h1>
+    <h4>
+      e-Problemsは手軽に最先端のテクノロジーに関する知識を学べる
+      問題集です。
+      <br />
+      最先端はアップデートされていきますが、それに伴いこの問題集もアップデートされていくところが特徴です。
+    </h4>
+  <div class="subject-part">
+    {% for subject in subjects %}
+      <h3>
+        <a href="{% url 'app:subject' pk=subject.pk %}">{{ subject.name }}</a>
+      </h3>
+    {% endfor %}
+  </div>
+  </div>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+header {
+    height: 80px;
+    width:100%;
+    background-color:rgba(0, 0, 225, 0.4);
+}
+
+.header-left a{
+    color:red;
+    padding-left: 30px;
+    float: left;
+    line-height: 80px;
+    text-decoration: none;
+}
+
+.header-menu a{
+    float: right;
+    line-height: 80px;
+    padding-right: 10px;
+    text-decoration: none;
+}
+
+.explain-part {
+   text-align: center;
+}
+
+.explain-part h1{
+    letter-spacing: 8px;
+}

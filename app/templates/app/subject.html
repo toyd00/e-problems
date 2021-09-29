@@ -1,0 +1,8 @@
+{% extends 'app/base.html' %}
+
+{% block content %}
+
+<h2>{{ subject.name }}</h2>
+<a href="{% url 'app:problem' pk=subject.pk %}">問題を解く</a>
+
+{% endblock %}
