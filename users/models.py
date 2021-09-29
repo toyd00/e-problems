@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
 from django.utils import timezone
-
+"""
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
@@ -42,3 +42,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
+"""
