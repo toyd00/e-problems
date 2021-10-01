@@ -4,7 +4,9 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import PermissionsMixin, UserManager
 from django.db import models
 from django.utils import timezone
-"""
+
+
+
 
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
@@ -13,6 +15,9 @@ class CustomUserManager(BaseUserManager):
 
         if not email:
             raise ValueError("The given email must be set")
+
+        if not username:
+            raise ValueError("The given username must be set")
 
         email = self.normalize_email(email)
         GlobalUserModel = apps.get_model(self.model._meta.app_label, self.model._meta.object_name)
@@ -27,6 +32,16 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(username, email, **extra_fields)
 
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True')
+
+        return self._create_user(username, email, password, **extra_fields)
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("メールアドレス", unique=True)
@@ -36,10 +51,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField("アクティブユーザーか否か", default=True)
     data_joined = models.DateTimeField("アカウント作成日", default=timezone.now)
 
-    objects = UserManager()
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
-"""
