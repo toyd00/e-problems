@@ -31,7 +31,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
     'app.apps.AppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
-#AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'learning.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djangodatabase',
+        'NAME': 'learning_app',
         'USER': 'taishi',
         'PASSWORD': 'TaishiOmachi00.',
         'HOST': '127.0.0.1',
