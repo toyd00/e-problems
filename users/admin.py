@@ -1,8 +1,10 @@
-"""
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.forms import (
+    AdminPasswordChangeForm, UserCreationForm, UserChangeForm
+)
+from django.utils.translation import gettext, gettext_lazy as _
 from .models import CustomUser
 
 
@@ -22,7 +24,19 @@ class CustionUserChangeForm(UserChangeForm):
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
+        (None, {'fields': ('email', 'username', 'password')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_superuser', 'groups', 'userpermission')}),
+        (_('Important dates'), {'fields': ('last_login', 'data_joined')}),
     )
-    
-"""
+
+    form = UserChangeForm
+    add_form = UserCreationForm
+    change_password_form = AdminPasswordChangeForm
+    list_display = ('username', 'email', 'is_staff')
+    list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
+    search_fields = ('username', 'email')
+    ordering = ('username',)
+    filter_horizontal = ('groups', 'user_permissions',)
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
