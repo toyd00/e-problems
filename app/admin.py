@@ -2,12 +2,12 @@ from django.contrib import admin
 from .models import Subject, Problem, Choice
 
 
-class ChoineInLine(admin.StackedInline):
+class ChoiceInLine(admin.StackedInline):
     model = Choice
     extra = 4
 
 class ProblemAdmin(admin.ModelAdmin):
-    inlines = [ChoineInLine]
+    inlines = [ChoiceInLine]
 
 
 admin.site.register(Subject)
