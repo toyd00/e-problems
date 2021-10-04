@@ -14,10 +14,8 @@
     </div>
     <div class="header-menu">
         {% if request.user.is_authenticated %}
-          <ul>
-            <li><a href="{% url 'app:user' request.user.id %}">マイページへ</a></li>
+            <a href="{% url 'app:user' request.user.id %}">マイページへ</a>
             <a href="{% url 'app:logout' %}">ログアウト</a>
-          </ul>
         {% else %}
             <a href="{% url 'app:signup' %}">新規作成</a>
             <a href="{% url 'app:login' %}">ログイン</a>
