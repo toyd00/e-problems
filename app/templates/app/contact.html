@@ -1,0 +1,17 @@
+<h1>お問い合わせフォーム</h1>
+<form method='POST' action="{% url 'app:contact' %}">{% csrf_token %}
+
+{{ form.as_p }}
+<input type="submit" value="送信">
+<!--
+  <label>件名</label>
+  {{ form.subject }}
+  <br />
+  <label>メールアドレス</label>
+  {{ form.email }}
+  <br />
+  <label>お問い合わせ内容</label>
+  {{ form.content }}
+
+</form>
+--!>
