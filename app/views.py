@@ -1,8 +1,10 @@
+from typing import Text
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from django.http.response import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 
-from .form import CustomUserCreationForm, ContactForm
+from .form import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, ChoiceFormSet
 from .models import Problem, Subject
 
 from users.models import CustomUser
@@ -47,6 +49,30 @@ def problem(request, pk):
     problems = subject.problem_set.all()
     return render(request, 'app/problem.html', {'problems': problems})
 
+def make_problem(request):
+    if request.method == 'POST':
+        form = ProblemForm(request.POST or None)
+        form_set = ChoiceFormSet(request.POST or None)
+        context = {
+            'form': form,
+            'form_set': form_set,
+        }
+        if all([form.is_valid(), form_set.is_valid()]):
+            problem = form.save(commit=False)
+            problem.save()
+            for form in form_set:
+                choice = form.save(commit=False)
+                choice.problem = problem
+                choice.save()
+            return redirect('app:index')
+    else:
+        context = {
+            'form': ProblemForm(),
+            'formset': ChoiceFormSet(),
+        }
+    return render(request, 'app/make_problem.html', context)
+
+
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -61,7 +87,6 @@ def contact(request):
             return redirect('app:thank')
     else:
         form = ContactForm()
-    print(form.is_valid())
     return render(request, 'app/contact.html', {'form': form})
 
 

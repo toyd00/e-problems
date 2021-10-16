@@ -1,0 +1,25 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+<button id="add">追加</button>
+<form method="post" action="{% url 'app:make_problem' %}">{% csrf_token %}
+  {{ form.as_p }}
+  {{ formset.management_form }}
+  <div id="options">
+      {% for form in formset %}
+        <div class="problem-form">
+          {{ form }}
+        </div>
+      {% endfor %}
+  </div>
+    <div id="empty-form" class="hidden">{{ formset.empty_form }}</div>
+  </div>
+  <input type="submit" value="作成完了">
+</form>
+
+
+
+<script type="text/javascript" src="{% static 'app/js/make_problem.js' %}"></script>
+{% endblock  %}
+
