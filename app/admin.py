@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Subject, Problem, Choice
+from .models import Subject, Problem, Choice, Type
 
 
 class ChoiceInLine(admin.StackedInline):
     model = Choice
-    extra = 4
+    extra = 0
 
 class ProblemAdmin(admin.ModelAdmin):
     inlines = [ChoiceInLine]
@@ -13,3 +13,4 @@ class ProblemAdmin(admin.ModelAdmin):
 admin.site.register(Subject)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Choice)
+admin.site.register(Type)
