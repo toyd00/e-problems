@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block content %}
-<button id="add">追加</button>
-<form method="post" action="{% url 'app:make_problem' %}">{% csrf_token %}
+<form method="post" action="{% url 'app:make_problem' pk=subject.pk %}">{% csrf_token %}
+  <h2>分野 : {{ subject.name }}</h2>
   {{ form.as_p }}
   {{ formset.management_form }}
   <div id="options">
@@ -15,6 +15,8 @@
   </div>
     <div id="empty-form" class="hidden">{{ formset.empty_form }}</div>
   </div>
+  <button id="add">追加</button>
+  <br />
   <input type="submit" value="作成完了">
 </form>
 

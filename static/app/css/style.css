@@ -25,16 +25,16 @@ header {
 }
 
 .explain-part img {
+    height: 400px;
     width: 100%;
-    opacity: 0.5;
+    opacity: 0.2;
 }
 
 .explain-part h1 {
     position: absolute;
+    top: 10px;
+    left: 100px;
     color: green;
-    -ms-transform: translate(-50%,-50%);
-    -webkit-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
     letter-spacing: 8px;
 }
 

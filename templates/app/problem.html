@@ -2,12 +2,19 @@
 
 {% block content %}
 
-{% for problem in problems %}
-    <p>＜{{ problem.title }}＞</P>
-    <p>{{ problem.content }}</p>
-    {% for choice in problem.choice_set.all %}
-        <p>{{ choice.content }}</p>
+<form action="{% url 'app:score_test' %}" method="post">
+{% csrf_token %}
+    {% for problem in problems %}
+        <p>{{ problem.content }}</p>
+        {% for choice in problem.choice_set.all %}
+            <labal><input type='radio' name='choice' value="{{ problem.id }}/{{ forloop.counter }}">{{ choice.content }}</label>
+            <br />
+        {% endfor %}
+         {{ problem.correct_choice }}
+        <br />
     {% endfor %}
-{% endfor %}
+    <input type='submit' value="提出する">
+</form>
+
 
 {% endblock  %}
