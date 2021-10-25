@@ -40,25 +40,25 @@ def subject(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     return render(request, 'app/subject.html', {'subject': subject})
 
-def problem(request, pk):
-    """
-    subject = get_object_or_404(Subject, pk=pk)
-    problems = subject.objects.all().filter(subject__name=subject.name)
-    """
+def miniTest(request, pk):
     subject = Subject.objects.get(pk=pk)
     problems = subject.problem_set.all()
+    print(problems)
     return render(request, 'app/problem.html', {'problems': problems})
 
-def make_problem(request):
+def make_problem(request, pk):
+    subject = Subject.objects.get(pk=pk)
     if request.method == 'POST':
         form = ProblemForm(request.POST or None)
         form_set = ChoiceFormSet(request.POST or None)
         context = {
             'form': form,
             'form_set': form_set,
+            'subject': subject,
         }
         if all([form.is_valid(), form_set.is_valid()]):
             problem = form.save(commit=False)
+            problem.subject = subject
             problem.save()
             for form in form_set:
                 choice = form.save(commit=False)
@@ -69,8 +69,23 @@ def make_problem(request):
         context = {
             'form': ProblemForm(),
             'formset': ChoiceFormSet(),
+            'subject': subject,
         }
     return render(request, 'app/make_problem.html', context)
+
+def score_test(request):
+    if request.method == 'POST':
+        choices = request.POST.getlist('choice')
+        count = 0
+        for choice in choices:
+            problem_id, selected_choice = map(int, choice.split('/'))
+            problem = Problem.objects.get(id=problem_id)
+            if problem.correct_choice == selected_choice:
+                count += 1
+        context = {'count': count}
+        return render(request, 'app/test_result.html', context)
+
+    return redirect('app:index')
 
 
 def contact(request):
