@@ -21,9 +21,9 @@ class Type(models.Model):
 class Problem(models.Model):
     type = models.ForeignKey(verbose_name="問題の種類", to=Type, max_length=20, on_delete=PROTECT)
     subject = models.ForeignKey(verbose_name="科目", to=Subject, on_delete=models.PROTECT)
-    option_num = models.IntegerField(verbose_name="選択肢の数")
-    content = "次のうちから正しいものを１つ選びなさい。"
+    content = models.TextField("問題文", default="次のうちから正しいものを１つ選びなさい")
     made_date = DateField("問題作成日", default=datetime.date.today)
+    correct_choice = models.IntegerField("正解の選択肢", default=1)
 
     def __str__(self):
         return self.type.name + ' ' + self.subject.name
