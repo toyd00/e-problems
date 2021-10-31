@@ -1,11 +1,11 @@
 from typing import Text
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 
-from .form import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, ChoiceFormSet
-from .models import Problem, Subject
+from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, ChoiceFormSet
+from .models import Problem, Subject, Like
 
 from users.models import CustomUser
 
@@ -13,6 +13,7 @@ from users.models import CustomUser
 def index(request):
     subjects = Subject.objects.all()
     return render(request, 'app/index.html', {'subjects': subjects})
+
 
 def signup(request):
     if request.method == "POST":
@@ -32,19 +33,48 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
 
+
 def user(request, pk):
     user = get_object_or_404(CustomUser, pk=pk)
     return render(request, 'app/user.html', {'user': user})
+
 
 def subject(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
     return render(request, 'app/subject.html', {'subject': subject})
 
+
 def miniTest(request, pk):
     subject = Subject.objects.get(pk=pk)
     problems = subject.problem_set.all()
-    print(problems)
-    return render(request, 'app/problem.html', {'problems': problems})
+    context = {
+        'subject': subject,
+        'problems': problems,
+    }
+    return render(request, 'app/problem.html', context)
+
+
+def like(request, pk):
+    problem = Problem.objects.get(pk=pk)
+    print(request.user.id)
+    query = Like.objects.filter(user__id=request.user.id, problem__id=pk)
+    #print(query)
+    response = {'button': 'いいね'}
+    like = problem.like
+    if query.count() == 0:
+        like.count += 1
+        like.user.add(request.user)
+        like.save()
+        response['button'] = 'いいね取り消し'
+    else:
+        like.count -= 1
+        like.user.remove(request.user)
+        like.save()
+
+    response['like_count'] = like.count
+    print(response)
+    return JsonResponse(response)
+
 
 def make_problem(request, pk):
     subject = Subject.objects.get(pk=pk)
@@ -59,6 +89,7 @@ def make_problem(request, pk):
         if all([form.is_valid(), form_set.is_valid()]):
             problem = form.save(commit=False)
             problem.subject = subject
+            problem.like = Like.objects.create()
             problem.save()
             for form in form_set:
                 choice = form.save(commit=False)
@@ -73,6 +104,7 @@ def make_problem(request, pk):
         }
     return render(request, 'app/make_problem.html', context)
 
+
 def score_test(request):
     if request.method == 'POST':
         choices = request.POST.getlist('choice')
@@ -84,8 +116,8 @@ def score_test(request):
                 count += 1
         context = {'count': count}
         return render(request, 'app/test_result.html', context)
-
-    return redirect('app:index')
+    else:
+        return redirect('app:index')
 
 
 def contact(request):
