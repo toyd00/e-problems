@@ -8,6 +8,7 @@ urlpatterns = [
     path('user/<int:pk>/', views.user, name='user'),
     path('subject/<int:pk>/', views.subject, name='subject'),
     path('problem/<int:pk>/', views.miniTest, name='problem'),
+    path('like/<int:pk>/', views.like, name='like'),
     path('make_problem/<int:pk>/', views.make_problem, name='make_problem'),
     path('test_result/', views.score_test, name='test_result'),
     path('signup/', views.signup, name='signup'),
