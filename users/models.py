@@ -20,10 +20,9 @@ class CustomUserManager(BaseUserManager):
             raise ValueError("The given username must be set")
 
         email = self.normalize_email(email)
-        GlobalUserModel = apps.get_model(self.model._meta.app_label, self.model._meta.object_name)
-        username = GlobalUserModel.normalize_username(username)
+        username = self.model.normalize_username(username)
         user = self.model(username=username, email=email, **extra_fields)
-        user.password = make_password(password)
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
