@@ -12,7 +12,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ('email',)
+        fields = '__all__'
 
 
 class CustionUserChangeForm(UserChangeForm):
@@ -25,7 +25,7 @@ class CustionUserChangeForm(UserChangeForm):
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'username', 'password')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_superuser', 'groups', 'userpermission')}),
+        (_('Permissions'), {'fields': ('is_active', 'is_superuser', 'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'data_joined')}),
     )
 
