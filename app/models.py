@@ -24,6 +24,7 @@ class Like(models.Model):
 
 class Problem(models.Model):
     type = models.ForeignKey(verbose_name="問題の難易度", to=Type, max_length=20, on_delete=PROTECT)
+    user = models.ForeignKey(verbose_name="問題を作成したユーザ", to='users.CustomUser', on_delete=PROTECT, blank=True, null=True)
     subject = models.ForeignKey(verbose_name="科目", to=Subject, on_delete=models.PROTECT)
     content = models.TextField("問題文", default="次のうちから正しいものを１つ選びなさい")
     made_date = DateField("問題作成日", default=datetime.date.today)
@@ -34,7 +35,7 @@ class Problem(models.Model):
         return self.type.name + ' ' + self.subject.name
 
 class Choice(models.Model):
-    content = models.CharField(max_length=200)
+    content = models.CharField("選択肢", max_length=200)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
