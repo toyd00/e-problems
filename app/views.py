@@ -1,11 +1,13 @@
 from typing import Text
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from django.forms.formsets import formset_factory
 from django.http.response import HttpResponse, JsonResponse
+from django.forms import formset_factory
 from django.shortcuts import redirect, render, get_object_or_404
 
-from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, ChoiceFormSet
-from .models import Problem, Subject, Like
+from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm
+from .models import Subject, Problem, Choice, Like
 
 from users.models import CustomUser
 
@@ -51,14 +53,30 @@ def miniTest(request, pk):
         'subject': subject,
         'problems': problems,
     }
-    return render(request, 'app/problem.html', context)
+    return render(request, 'app/mini_test.html', context)
+
+
+def score_test(request, problem_count):
+    if request.method == 'POST':
+        count = 0
+
+        for p_c in range(problem_count):
+            value = request.POST.get('choice-' + str(p_c + 1), False)
+            if value:
+                problem_id, selected_choice = map(int, value.split('/'))
+                problem = Problem.objects.get(id=problem_id)
+                if problem.correct_choice == selected_choice:
+                    count += 1
+        context = {'count': count}
+        return render(request, 'app/test_result.html', context)
+    else:
+        return redirect('app:index')
 
 
 def like(request, pk):
     problem = Problem.objects.get(pk=pk)
     print(request.user.id)
     query = Like.objects.filter(user__id=request.user.id, problem__id=pk)
-    #print(query)
     response = {'button': 'いいね'}
     like = problem.like
     if query.count() == 0:
@@ -78,46 +96,49 @@ def like(request, pk):
 
 def make_problem(request, pk):
     subject = Subject.objects.get(pk=pk)
-    if request.method == 'POST':
-        form = ProblemForm(request.POST or None)
-        form_set = ChoiceFormSet(request.POST or None)
-        context = {
-            'form': form,
-            'form_set': form_set,
-            'subject': subject,
-        }
-        if all([form.is_valid(), form_set.is_valid()]):
-            problem = form.save(commit=False)
-            problem.subject = subject
-            problem.like = Like.objects.create()
-            problem.save()
-            for form in form_set:
-                choice = form.save(commit=False)
-                choice.problem = problem
-                choice.save()
-            return redirect('app:index')
+    form = ProblemForm(request.POST or None)
+    ChoiceFormSet = formset_factory(
+        form=ChoiceForm,
+        extra=2,
+    )
+    formset = ChoiceFormSet(request.POST or None)
+    context = {
+        'form': form,
+        'formset': formset,
+        'subject': subject,
+    }
+
+    if all([form.is_valid(), formset.is_valid()]):
+        problem = form.save(commit=False)
+        problem.subject = subject
+        problem.like = Like.objects.create()
+        problem.save()
+        for form in formset:
+            choice = form.save(commit=False)
+            choice.problem = problem
+            choice.save()
+        return redirect('app:index')
+    """
     else:
+        print(ChoiceFormSet)
         context = {
             'form': ProblemForm(),
             'formset': ChoiceFormSet(),
             'subject': subject,
         }
+    """
     return render(request, 'app/make_problem.html', context)
 
 
-def score_test(request):
-    if request.method == 'POST':
-        choices = request.POST.getlist('choice')
-        count = 0
-        for choice in choices:
-            problem_id, selected_choice = map(int, choice.split('/'))
-            problem = Problem.objects.get(id=problem_id)
-            if problem.correct_choice == selected_choice:
-                count += 1
-        context = {'count': count}
-        return render(request, 'app/test_result.html', context)
-    else:
-        return redirect('app:index')
+def edit_problem(request):
+    user = request.user
+    problems = user.problem_set.all()
+    print(problems)
+    context = {'problems': problems}
+    return render(request, 'app/my_problem.html', context)
+
+
+
 
 
 def contact(request):
