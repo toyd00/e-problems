@@ -2,25 +2,27 @@
 {% load static %}
 
 {% block content %}
-<form method="post" action="{% url 'app:make_problem' pk=subject.pk %}">{% csrf_token %}
   <h2>分野 : {{ subject.name }}</h2>
+  <form method="post" action="{% url 'app:make_problem' pk=subject.pk %}">{% csrf_token %}
   {{ form.as_p }}
   {{ formset.management_form }}
   <div id="options">
       {% for form in formset %}
-        <div class="problem-form">
+        <div class="problem-form" id='form-{{ forloop.counter }}'>
           {{ form }}
         </div>
+        <button class="remove"  id='remove-{{ forloop.counter }}' data-id='{{ forloop.counter }}'>削除</button>
       {% endfor %}
-  </div>
+    </div>
     <div id="empty-form" class="hidden">{{ formset.empty_form }}</div>
-  </div>
+    <button id="remove-button" class="hidden">削除</button>
   <button id="add">追加</button>
   <br />
   <input type="submit" value="作成完了">
 </form>
 
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{% static 'app/js/make_problem.js' %}"></script>
 {% endblock  %}
 
