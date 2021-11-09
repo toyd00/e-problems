@@ -1,13 +1,6 @@
-/*<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>*/
 
 {
   'use strict';
-
-  $('.good').on('click', function() {
-    const problem_pk = $(this).data('id')
-    console.log($('#likeNum_' + problem_pk).val())
-    console.log('#likeNum_' + problem_pk)
-  })
 
   $('.like_button').on('click', function(e) {
     const problem_pk = $(this).data('id')

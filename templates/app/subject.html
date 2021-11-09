@@ -5,4 +5,5 @@
 <h2>{{ subject.name }}</h2>
 <a href="{% url 'app:problem' pk=subject.pk %}">問題を解く</a>
 <a href="{% url 'app:make_problem' pk=subject.pk %}">問題を作る</a>
+<a href="{% url 'app:edit_problem' %}">問題を編集する</a>
 {% endblock %}

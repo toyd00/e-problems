@@ -7,7 +7,7 @@
     <fieldset>
         <p>{{ problem.content }}</p>
         {% for choice in problem.choice_set.all %}
-            <labal><input type='radio' id='choice' name='choice' value="{{ problem.id }}/{{ forloop.counter }}">{{ choice.content }}</label>
+            <labal><input type='radio' name='choice-{{ forloop.parentloop.counter }}' value="{{ problem.id }}/{{ forloop.counter }}" form='choice'>{{ choice.content }}</label>
             <br />
         {% endfor %}
             <form class="like_button" data-id={{ problem.pk }} data-value="good" action="{% url 'app:like' pk=problem.pk %}" method='post'>{% csrf_token %}
@@ -19,15 +19,15 @@
     {% endfor %}
 
 
-<form id='choice' action="{% url 'app:test_result' %}" method='post'>{% csrf_token %}
+<form id='choice' action="{% url 'app:test_result' problem_count=problems|length %}" method='post'>{% csrf_token %}
     <input type='submit' id='choice' value="提出する">
 </form>
 
-<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
+<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script type='text/javascript' src="{% static 'app/js/base.js' %}"></script>
-<script type='text/javascript' src="{% static 'app/js/problem.js' %}"></script>
+<script type='text/javascript' src="{% static 'app/js/mini_test.js' %}"></script>
 
 {% endblock %}
