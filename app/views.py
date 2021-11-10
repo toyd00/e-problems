@@ -58,16 +58,23 @@ def miniTest(request, pk):
 
 def score_test(request, problem_count):
     if request.method == 'POST':
-        count = 0
-
+        correct_count = 0
+        problems = []
+        isCorrect_list = [False for _ in range(problem_count)]
         for p_c in range(problem_count):
             value = request.POST.get('choice-' + str(p_c + 1), False)
             if value:
                 problem_id, selected_choice = map(int, value.split('/'))
                 problem = Problem.objects.get(id=problem_id)
+                problems.append(problem)
                 if problem.correct_choice == selected_choice:
-                    count += 1
-        context = {'count': count}
+                    correct_count += 1
+                    isCorrect_list[p_c] = True
+        context = {
+            'correct_count': correct_count,
+            'problems': problems,
+            'isCrrect_list': isCorrect_list,
+        }
         return render(request, 'app/test_result.html', context)
     else:
         return redirect('app:index')
@@ -136,8 +143,6 @@ def edit_problem(request):
     print(problems)
     context = {'problems': problems}
     return render(request, 'app/my_problem.html', context)
-
-
 
 
 
