@@ -1,10 +1,10 @@
 from typing import Text
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
-from django.forms.formsets import formset_factory
-from django.http.response import HttpResponse, JsonResponse
 from django.forms import formset_factory
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
+from django.views import View
 
 from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm
 from .models import Subject, Problem, Choice, Like
@@ -49,9 +49,14 @@ def subject(request, pk):
 def miniTest(request, pk):
     subject = Subject.objects.get(pk=pk)
     problems = subject.problem_set.all()
+    problemID_list = []
+    for problem in problems:
+        problemID_list.append(problem.id)
+    print(problemID_list)
     context = {
         'subject': subject,
         'problems': problems,
+        'problemID_list': problemID_list,
     }
     return render(request, 'app/mini_test.html', context)
 
@@ -62,9 +67,9 @@ def score_test(request, problem_count):
         problems = []
         isCorrect_list = [False for _ in range(problem_count)]
         for p_c in range(problem_count):
-            value = request.POST.get('choice-' + str(p_c + 1), False)
-            if value:
-                problem_id, selected_choice = map(int, value.split('/'))
+            problem_id = request.POST.get('problemID-' + str(p_c + 1), False)
+            selected_choice = request.POST.get('choice-' + str(p_c + 1), False)
+            if problem_id:
                 problem = Problem.objects.get(id=problem_id)
                 problems.append(problem)
                 if problem.correct_choice == selected_choice:
