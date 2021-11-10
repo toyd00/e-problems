@@ -14,8 +14,6 @@
     total_forms.setAttribute('value', empty_form_count)
     options.append(empty_form);
     const button = document.getElementById('remove-button').cloneNode(true);
-    //const button = document.createElement('button');
-    //button.textContent = '削除'
     button.setAttribute('id', `remove-${empty_form_count}`);
     button.setAttribute('class', 'remove');
     button.setAttribute('data-id', `${empty_form_count}`);
@@ -25,7 +23,6 @@
 }
 {
   $(document).on('click', '.remove', function(event) {
-    console.log('iiii')
     if (event) {
       event.preventDefault();
     }
@@ -33,6 +30,5 @@
     console.log('#form-' + (id - 1));
     $('#form-' + id).remove();
     $('#remove-' + id).remove();
-    $('#string').remove();
   })
 }

@@ -7,7 +7,7 @@
     <fieldset>
         <p>{{ problem.content }}</p>
         {% for choice in problem.choice_set.all %}
-            <labal><input type='radio' name='choice-{{ forloop.parentloop.counter }}' value="{{ problem.id }}/{{ forloop.counter }}" form='choice'>{{ choice.content }}</label>
+            <label><input type='radio' name='choice-{{ forloop.parentloop.counter }}' value="{{ problem.id }}/{{ forloop.counter }}" form='choice'>{{ choice.content }}</label>
             <br />
         {% endfor %}
             <form class="like_button" data-id={{ problem.pk }} data-value="good" action="{% url 'app:like' pk=problem.pk %}" method='post'>{% csrf_token %}
