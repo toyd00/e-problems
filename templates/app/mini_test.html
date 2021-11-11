@@ -9,7 +9,7 @@
         <p>{{ problem.content }}</p>
         <input type='text' class='hidden' name='problemID-{{ forloop.counter }}' value={{ problem.id }} form='choice'>
         {% for choice in problem.choice_set.all %}
-            <label><input type='radio' name='choice-{{ problem.id }}' value="{{ forloop.counter }}" form='choice'>{{ forloop.counter }}.{{ choice.content }}</label>
+            <label><input type='radio' name='choice-{{ forloop.parentloop.counter }}' value="{{ forloop.counter }}" form='choice'>{{ forloop.counter }}.{{ choice.content }}</label>
             <br />
         {% endfor %}
             <form class="like_button" data-id={{ problem.pk }} data-value="good" action="{% url 'app:like' pk=problem.pk %}" method='post'>{% csrf_token %}

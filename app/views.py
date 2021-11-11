@@ -1,4 +1,5 @@
-from typing import Text
+import copy
+
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.forms import formset_factory
@@ -52,7 +53,6 @@ def miniTest(request, pk):
     problemID_list = []
     for problem in problems:
         problemID_list.append(problem.id)
-    print(problemID_list)
     context = {
         'subject': subject,
         'problems': problems,
@@ -65,20 +65,28 @@ def score_test(request, problem_count):
     if request.method == 'POST':
         correct_count = 0
         problems = []
-        isCorrect_list = [False for _ in range(problem_count)]
+        isCorrect_list1 = [False for _ in range(problem_count)]
+        selected_choice_list = [-1 for _ in range(problem_count)]
         for p_c in range(problem_count):
             problem_id = request.POST.get('problemID-' + str(p_c + 1), False)
-            selected_choice = request.POST.get('choice-' + str(p_c + 1), False)
+            selected_choice = int(request.POST.get('choice-' + str(p_c + 1), -1))
+            selected_choice_list[p_c] = selected_choice
             if problem_id:
                 problem = Problem.objects.get(id=problem_id)
                 problems.append(problem)
                 if problem.correct_choice == selected_choice:
                     correct_count += 1
-                    isCorrect_list[p_c] = True
+                    isCorrect_list1[p_c] = True
+        isCorrect_list2 = copy.deepcopy(isCorrect_list1)
+        isCorrect_list1.reverse()
+        isCorrect_list2.reverse()
+        selected_choice_list.reverse()
         context = {
             'correct_count': correct_count,
             'problems': problems,
-            'isCrrect_list': isCorrect_list,
+            'isCorrect_list1': isCorrect_list1,
+            'isCorrect_list2': isCorrect_list2,
+            'selected_choice_list': selected_choice_list,
         }
         return render(request, 'app/test_result.html', context)
     else:
