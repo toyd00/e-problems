@@ -13,10 +13,10 @@
         </div>
         <button class="remove"  id='remove-{{ forloop.counter }}' data-id='{{ forloop.counter }}'>削除</button>
       {% endfor %}
-    </div>
+  </div>
     <div id="empty-form" class="hidden">{{ formset.empty_form }}</div>
     <button id="remove-button" class="hidden">削除</button>
-  <button id="add">追加</button>
+  <button class="add">追加</button>
   <br />
   <input type="submit" value="作成完了">
 </form>

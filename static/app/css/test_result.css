@@ -1,12 +1,14 @@
 #correct-count {
   color: red;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 }
 
-.red {
+.incorrect {
   color: red;
+  font-weight: bold;
 }
 
-.green {
+.correct {
   color:  green;
+  font-weight: bold;
 }

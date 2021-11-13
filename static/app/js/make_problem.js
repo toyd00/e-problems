@@ -1,34 +1,41 @@
 {
-  const total_forms = document.getElementById('id_form-TOTAL_FORMS')
-  const regrex = new RegExp('__prefix__', 'g');
-  const options = document.querySelector('#options');
-  document.querySelector('#add').addEventListener('click', (event) => {
+  $(document).on('click', '.add', function(event) {
     if (event) {
       event.preventDefault();
     }
-    const empty_form = document.getElementById('empty-form').cloneNode(true);
-    empty_form.setAttribute('class', 'problem-form');
-    const empty_form_count = document.getElementsByClassName('problem-form').length
-    empty_form.setAttribute('id', `form-${empty_form_count}`);
-    empty_form.innerHTML = empty_form.innerHTML.replace(regrex, empty_form_count)
-    total_forms.setAttribute('value', empty_form_count)
-    options.append(empty_form);
-    const button = document.getElementById('remove-button').cloneNode(true);
-    button.setAttribute('id', `remove-${empty_form_count}`);
-    button.setAttribute('class', 'remove');
-    button.setAttribute('data-id', `${empty_form_count}`);
-    options.append(button);
-  });
+    const empty_form_count = $('.problem-form').length
+    const empty_form = $('#empty-form').clone(true);
+    empty_form
+      .attr({
+        id: `form-${empty_form_count + 1}`,
+        class: 'problem-form',
+      })
+      .html(empty_form.html().replace(/__prefix__/g, empty_form_count))
+      .appendTo($('#options'))
 
-}
-{
+    $('#remove-button')
+      .clone(true)
+      .attr({
+        id: `remove-${empty_form_count + 1}`,
+        class:'remove',
+        'data-id': `${empty_form_count + 1}`
+      })
+      .appendTo($('#options'))
+
+    $('#id_form-TOTAL_FORMS').attr('value', empty_form_count + 1)
+  })
+
   $(document).on('click', '.remove', function(event) {
     if (event) {
       event.preventDefault();
     }
     const id = $(this).data('id');
-    console.log('#form-' + (id - 1));
-    $('#form-' + id).remove();
-    $('#remove-' + id).remove();
+    for(var i=id; i <= $('.problem-form').length; i++){
+      const regrex = new RegExp(i - 1, 'g')
+      $(`#id_form-${i - 1}-content`).val($(`#id_form-${i}-content`).val())
+    }
+    $('#remove-' + $('.problem-form').length).remove()
+    $('#form-' + $('.problem-form').length).remove()
+    $('#id_form-TOTAL_FORMS').attr('value', $('.problem-form').length);
   })
 }

@@ -38,7 +38,7 @@ class Choice(models.Model):
     content = models.CharField("選択肢", max_length=200)
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return "Question:" + self.problem.content + "\nSelect" + self.content
 
 

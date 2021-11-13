@@ -2,12 +2,13 @@ import copy
 
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 
-from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm
+from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, RequiredFormset
 from .models import Subject, Problem, Choice, Like
 
 from users.models import CustomUser
@@ -113,12 +114,13 @@ def like(request, pk):
     print(response)
     return JsonResponse(response)
 
-
+@login_required
 def make_problem(request, pk):
     subject = Subject.objects.get(pk=pk)
     form = ProblemForm(request.POST or None)
     ChoiceFormSet = formset_factory(
         form=ChoiceForm,
+        formset=RequiredFormset,
         extra=2,
     )
     formset = ChoiceFormSet(request.POST or None)
@@ -127,9 +129,10 @@ def make_problem(request, pk):
         'formset': formset,
         'subject': subject,
     }
-
+    print(formset.is_valid())
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
+        problem.user = request.user
         problem.subject = subject
         problem.like = Like.objects.create()
         problem.save()
@@ -138,15 +141,7 @@ def make_problem(request, pk):
             choice.problem = problem
             choice.save()
         return redirect('app:index')
-    """
-    else:
-        print(ChoiceFormSet)
-        context = {
-            'form': ProblemForm(),
-            'formset': ChoiceFormSet(),
-            'subject': subject,
-        }
-    """
+
     return render(request, 'app/make_problem.html', context)
 
 

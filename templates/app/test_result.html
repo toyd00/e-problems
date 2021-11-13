@@ -4,6 +4,11 @@
 {% block content %}
     <h1>テスト結果</h1>
     <h1 id='correct-count'>{{ correct_count }}個正解です。</h1>
+
+    <form action="{% url 'app:index' %}">
+        <button>マイページへ</button>
+    </form>
+
     <h1>テストの答え</h1>
     {% for problem in problems %}
     <fieldset>
@@ -13,7 +18,7 @@
         {% for choice in problem.choice_set.all %}
             {% if selected_choice == forloop.counter %}
                 {% if problem.correct_choice == forloop.counter %}
-                    <label class='green'>
+                    <label class='correct'>
                         <input type='radio' name='choice-{{ forloop.parentloop.counter }}' checked disabled>{{ forloop.counter }}、{{ choice.content }}
                     </label>
                 {% else %}
@@ -23,7 +28,7 @@
                 {% endif %}
             {% else %}
                 {% if problem.correct_choice == forloop.counter %}
-                    <label class='red'>
+                    <label class='incorrect'>
                         <input type='radio'  name='choice-{{ forloop.parentloop.counter }}' disabled>{{ forloop.counter }}、{{ choice.content }}
                     </label>
                 {% else %}
@@ -41,17 +46,14 @@
         </form>
         <p id="likeCount_{{ problem.pk }}">{{ problem.like.count }}いいね</p>
         {% if isCorrect_list2.pop %}
-            <p>正解！！答えは{{ problem.correct_choice}}です</p>
+            <h3 class='correct'>正解！！答えは{{ problem.correct_choice}}です</h3>
         {% else %}
-            <p>不正解です。答えは{{ problem.correct_choice}}です</p>
+            <h3 class='incorrect'>不正解です。答えは{{ problem.correct_choice}}です</h3>
         {% endif %}
     </fieldset>
     {% endfor %}
 
 
-<form action="{% url 'app:index' %}">
-    <button>マイページへ</button>
-</form>
 
 
 <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-show-count="false">Tweet</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
