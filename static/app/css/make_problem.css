@@ -4,8 +4,9 @@
 
 .problem-form {
   display: inline;
+  margin: 0%;
 }
 
 .remove {
-  margin-left: 5px;
+  margin-left: 25px;
 }

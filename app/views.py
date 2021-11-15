@@ -123,7 +123,6 @@ def make_problem(request, pk):
         formset=RequiredFormset,
         extra=2,
     )
-    print(request.POST)
     formset = ChoiceFormSet(request.POST or None)
     context = {
         'form': form,
@@ -136,6 +135,7 @@ def make_problem(request, pk):
         problem.user = request.user
         problem.subject = subject
         problem.like = Like.objects.create()
+        problem.correct_choice = int(request.POST.get('answer', 1))
         problem.save()
         for form in formset:
             choice = form.save(commit=False)

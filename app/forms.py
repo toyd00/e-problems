@@ -15,15 +15,23 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ['email', 'username']
 
 class ProblemForm(forms.ModelForm):
+    content = forms.CharField(
+        label="問題文",
+        widget=forms.Textarea(attrs=({'rows': 3,})))
     class Meta:
         model = Problem
-        fields = ['type', 'content', 'made_date', 'correct_choice']
+        fields = ['type', 'content']
 
 
 class ChoiceForm(forms.ModelForm):
     class Meta:
         model = Choice
         fields = ['content']
+    content = forms.CharField(
+        label="選択肢",
+        required=True,
+        widget=forms.Textarea(attrs=({'rows': 3})),
+        )
 
 class ContactForm(forms.Form):
     subject = forms.CharField(max_length=100)

@@ -3,29 +3,30 @@
 
 {% block content %}
   <h2>分野 : {{ subject.name }}</h2>
-  <form method="post" action="{% url 'app:make_problem' pk=subject.pk %}">{% csrf_token %}
-  {{ form.as_p }}
-  {{ formset.management_form }}
-  <div id="options">
-      {% for form in formset %}
-        <div id='form-set-{{ forloop.counter }}' class='form-set'>
-            <div class="problem-form" id='form-{{ forloop.counter }}'>
-              {{ form }}
+  <form method='post' action="{% url 'app:make_problem' pk=subject.pk %}" id='done'>{% csrf_token %}
+      {{ form.as_p }}
+      {{ formset.management_form }}
+      <div id='options'>
+          <h2 id='ans-choice'>正解の選択肢：１</h2>
+          {% for form in formset %}
+            <div id='form-set-{{ forloop.counter }}' class='form-set'>
+                <div class="problem-form" id='form-{{ forloop.counter }}'>
+                  {{ form }}
+                </div>
+                <button class="remove"  id='remove-{{ forloop.counter }}' data-id='{{ forloop.counter }}'>削除</button>
+                <input type='radio' class='answer' id='answer-{{ forloop.counter }}' name='answer' value={{ forloop.counter }}>
             </div>
-            <button class="remove"  id='remove-{{ forloop.counter }}' data-id='{{ forloop.counter }}'>削除</button>
-            <input type='radio' class='answer' id='answer-{{ forloop.counter }}' name='answer' value={{ forloop.counter }}>
-        </div>
-      {% endfor %}
-  </div>
+          {% endfor %}
+      </div>
 
-  <div id='form-set' class='hidden'></div>
-  <input type='radio' id='answer-button' name='answer' class='hidden'>
-  <div id="empty-form" class="hidden">{{ formset.empty_form }}</div>
-  <button id="remove-button" class="hidden">削除</button>
+      <div id='form-set' class='hidden'></div>
+      <input type='radio' id='answer-button' name='answer' class='hidden'>
+      <div id='empty-form' class='hidden'>{{ formset.empty_form }}</div>
+      <button id='remove-button' class='hidden'>削除</button>
 
-  <button class="add">追加</button>
-  <br />
-  <input type="submit" value="作成完了">
+      <button class='add'>追加</button>
+      <br />
+      <input type='submit' value="作成完了">
   </form>
 
 
