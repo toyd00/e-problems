@@ -123,6 +123,7 @@ def make_problem(request, pk):
         formset=RequiredFormset,
         extra=2,
     )
+    print(request.POST)
     formset = ChoiceFormSet(request.POST or None)
     context = {
         'form': form,
