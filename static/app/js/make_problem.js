@@ -1,4 +1,5 @@
 'use strict';
+
 {
   $('#answer-1').attr('checked', true);
   $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');

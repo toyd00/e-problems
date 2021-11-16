@@ -4,6 +4,8 @@
 {% block content %}
   <h2>分野 : {{ subject.name }}</h2>
   <form method='post' action="{% url 'app:make_problem' pk=subject.pk %}" id='done'>{% csrf_token %}
+      <div class="my-rating"></div>
+
       {{ form.as_p }}
       {{ formset.management_form }}
       <div id='options'>
@@ -31,6 +33,16 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="jquery.star-rating-svg.js">
+  $(".my-rating").starRating({
+  initialRating: 4,
+  strokeColor: '#894A00',
+  strokeWidth: 10,
+  starSize: 25
+});
+</script>
+
 <script type="text/javascript" src="{% static 'app/js/make_problem.js' %}"></script>
 {% endblock  %}
 

@@ -17,7 +17,9 @@ class CustomUserCreationForm(UserCreationForm):
 class ProblemForm(forms.ModelForm):
     content = forms.CharField(
         label="問題文",
-        widget=forms.Textarea(attrs=({'rows': 3,})))
+        widget=forms.Textarea(attrs=({'rows': 3, 'cols': 60})),
+        initial="次のうちから正しいものを１つ選びなさい。"
+    )
     class Meta:
         model = Problem
         fields = ['type', 'content']
@@ -30,7 +32,7 @@ class ChoiceForm(forms.ModelForm):
     content = forms.CharField(
         label="選択肢",
         required=True,
-        widget=forms.Textarea(attrs=({'rows': 3})),
+        widget=forms.Textarea(attrs=({'rows': 3, 'cols': 60})),
         )
 
 class ContactForm(forms.Form):

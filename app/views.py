@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
+from django.forms.models import modelform_factory
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
@@ -93,10 +94,9 @@ def score_test(request, problem_count):
     else:
         return redirect('app:index')
 
-
+@login_required
 def like(request, pk):
     problem = Problem.objects.get(pk=pk)
-    print(request.user.id)
     query = Like.objects.filter(user__id=request.user.id, problem__id=pk)
     response = {'button': 'いいね'}
     like = problem.like
