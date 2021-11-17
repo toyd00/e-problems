@@ -8,13 +8,10 @@
         e-Problemsはユーザ同士で問題を作りあって解きあうためのプラットフォームです。
       </h4>
   </div>
-  <div class="subject-part">
-    {% for subject in subjects %}
-      <h3>
-        <a href="{% url 'app:subject' pk=subject.pk %}">{{ subject.name }}</a>
-      </h3>
-    {% endfor %}
-  </div>
+  <div class="content">
+      <h3><a href="{% url 'app:make_problem' %}">問題を作る</a></h3>
+      <h3><a href="{% url 'app:my_problem' %}">問題を編集する</a></h3>
+      <h3><a href="{% url 'app:subject' %}">問題を解く</a></h3>
   </div>
 {% endblock %}
 

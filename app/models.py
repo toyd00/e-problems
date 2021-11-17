@@ -12,7 +12,8 @@ class Subject(models.Model):
         return self.name
 
 class Type(models.Model):
-    name = models.CharField("問題難易度", max_length=20, default="基礎")
+    name = models.CharField("問題難易度", max_length=20, default="易しい")
+    name = models.CharField("問題難易度", max_length=20, default="易しい")
 
     def __str__(self):
         return self.name

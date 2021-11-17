@@ -4,7 +4,7 @@
 {% block content %}
   {% if name == "make" %}
   <h2>分野 : {{ subject.name }}</h2>
-  <form method='post' class={{ name }} action="{% url 'app:make_problem' pk=subject.pk %}" id='done'>{% csrf_token %}
+  <form method='post' class={{ name }} action="{% url 'app:make_problem'  %}" id='done'>{% csrf_token %}
   {% else %}
   <h2>分野 : {{ problem.subject.name }}</h2>
   <form method='post' class={{ name }} action="{% url 'app:edit_problem' pk=problem.pk %}" id='done'>{% csrf_token %}

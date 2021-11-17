@@ -2,8 +2,8 @@
 
 {% block content %}
 
-<h2>{{ subject.name }}</h2>
-<a href="{% url 'app:problem' pk=subject.pk %}">問題を解く</a>
-<a href="{% url 'app:make_problem' pk=subject.pk %}">問題を作る</a>
-<a href="{% url 'app:my_problem' %}">問題を編集する</a>
+    {% for subject in subject_list %}
+        <a href="{% url 'app:test' pk=subject.pk %}"><h3>{{ subject}}</h3></a>
+    {% endfor %}
+
 {% endblock %}

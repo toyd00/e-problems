@@ -45,9 +45,9 @@ def user(request, pk):
     return render(request, 'app/user.html', {'user': user})
 
 
-def subject(request, pk):
-    subject = get_object_or_404(Subject, pk=pk)
-    return render(request, 'app/subject.html', {'subject': subject})
+def subject(request):
+    subject_list = Subject.objects.all()
+    return render(request, 'app/subject.html', {'subject_list': subject_list})
 
 
 def miniTest(request, pk):
@@ -95,6 +95,7 @@ def score_test(request, problem_count):
     else:
         return redirect('app:index')
 
+
 @login_required
 def like(request, pk):
     problem = Problem.objects.get(pk=pk)
@@ -115,9 +116,9 @@ def like(request, pk):
     print(response)
     return JsonResponse(response)
 
+
 @login_required
-def make_problem(request, pk):
-    subject = Subject.objects.get(pk=pk)
+def make_problem(request):
     form = ProblemForm(request.POST or None)
     choiceFormSet = formset_factory(
         form=ChoiceForm,
@@ -128,7 +129,6 @@ def make_problem(request, pk):
     context = {
         'form': form,
         'formset': formset,
-        'subject': subject,
     }
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
@@ -144,6 +144,7 @@ def make_problem(request, pk):
         return redirect('app:my_problem')
 
     return render(request, 'app/make_problem.html', context)
+
 
 @login_required
 def edit_problem(request, pk=None):

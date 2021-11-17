@@ -22,7 +22,7 @@ class ProblemForm(forms.ModelForm):
     )
     class Meta:
         model = Problem
-        fields = ['type', 'content']
+        fields = ['subject', 'type', 'content']
 
 
 class ChoiceForm(forms.ModelForm):
