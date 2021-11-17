@@ -1,0 +1,53 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+  {% if name == "make" %}
+  <h2>分野 : {{ subject.name }}</h2>
+  <form method='post' class={{ name }} action="{% url 'app:make_problem' pk=subject.pk %}" id='done'>{% csrf_token %}
+  {% else %}
+  <h2>分野 : {{ problem.subject.name }}</h2>
+  <form method='post' class={{ name }} action="{% url 'app:edit_problem' pk=problem.pk %}" id='done'>{% csrf_token %}
+  {% endif %}
+      <div class="my-rating"></div>
+      {{ form.as_p }}
+      {{ formset.management_form }}
+      <div id='options'>
+          <h2 id='ans-choice'>正解の選択肢：１</h2>
+          {% for form in formset %}
+            <div id='form-set-{{ forloop.counter }}' class='form-set'>
+                <div class="problem-form" id='form-{{ forloop.counter }}' style='margin-right: 10px;'>
+                  {{ form }}
+                </div>
+                <button class="remove"  id='remove-{{ forloop.counter }}' data-id='{{ forloop.counter }}' style='margin-right: 5px;'>削除</button>
+                <input type='radio' class='answer' id='answer-{{ forloop.counter }}' name='answer' value={{ forloop.counter }}>
+            </div>
+          {% endfor %}
+      </div>
+
+      <div id='form-set' class='hidden'></div>
+      <input type='radio' id='answer-button' name='answer' class='hidden'>
+      <div id='empty-form' class='hidden'>{{ formset.empty_form }}</div>
+      <button id='remove-button' class='hidden'>削除</button>
+
+      <button class='add'>追加</button>
+      <br />
+      <input type='submit' value="作成完了">
+  </form>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="jquery.star-rating-svg.js">
+  $(".my-rating").starRating({
+  initialRating: 4,
+  strokeColor: '#894A00',
+  strokeWidth: 10,
+  starSize: 25
+});
+</script>
+
+<script type="text/javascript" src="{% static 'app/js/make_problem.js' %}"></script>
+{% endblock  %}
+
+

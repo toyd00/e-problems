@@ -1,15 +1,27 @@
 {% extends 'app/base.html' %}
-
 {% block content %}
 
 <h2>{{ request.user.username }}さんの作成した問題</h2>
 
 {% for problem in problems %}
-    {{ problem.content }}
+  <fieldset>
+    <p>{{ problem.content }}</p>
     {% for choice in problem.choice_set.all %}
-      {{ choice }}
+      {% if problem.correct_choice == forloop.counter %}
+          <p class='correct'>{{ forloop.counter }}、{{ choice.content }}</p>
+      {% else %}
+          <p>{{ forloop.counter }}、{{ choice.content }}</p>
+      {% endif %}
     {% endfor %}
-
+    <h2 class='correct'>正解：{{ problem.correct_choice }}</h2>
+    <p>{{ problem.like.count }}いいね</p>
+    <form action="{% url 'app:edit_problem' pk=problem.pk %}">
+        <button>編集する</button>
+    </form>
+    {% comment %} <form method='post' action="{% url 'app:delete_problem' pk=problem.pk %}">{% csrf_token %}
+        <button>削除する</button>
+    </form> {% endcomment %}
+  </fieldset>
 
 {% endfor %}
 

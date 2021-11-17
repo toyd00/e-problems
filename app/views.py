@@ -3,8 +3,9 @@ import copy
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+from django.db.models.query import QuerySet
 from django.forms import formset_factory
-from django.forms.models import modelform_factory
+from django.forms.models import modelformset_factory
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
@@ -38,7 +39,7 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
 
-
+@login_required
 def user(request, pk):
     user = get_object_or_404(CustomUser, pk=pk)
     return render(request, 'app/user.html', {'user': user})
@@ -62,7 +63,7 @@ def miniTest(request, pk):
     }
     return render(request, 'app/mini_test.html', context)
 
-
+@login_required
 def score_test(request, problem_count):
     if request.method == 'POST':
         correct_count = 0
@@ -118,18 +119,17 @@ def like(request, pk):
 def make_problem(request, pk):
     subject = Subject.objects.get(pk=pk)
     form = ProblemForm(request.POST or None)
-    ChoiceFormSet = formset_factory(
+    choiceFormSet = formset_factory(
         form=ChoiceForm,
         formset=RequiredFormset,
         extra=2,
     )
-    formset = ChoiceFormSet(request.POST or None)
+    formset = choiceFormSet(request.POST or None)
     context = {
         'form': form,
         'formset': formset,
         'subject': subject,
     }
-    print(formset.is_valid())
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
         problem.user = request.user
@@ -141,15 +141,37 @@ def make_problem(request, pk):
             choice = form.save(commit=False)
             choice.problem = problem
             choice.save()
-        return redirect('app:index')
+        return redirect('app:my_problem')
 
     return render(request, 'app/make_problem.html', context)
 
+@login_required
+def edit_problem(request, pk=None):
+    problem = get_object_or_404(Problem, pk=pk, user=request.user)
+    form = ProblemForm(request.POST or None, instance=problem)
+    choiceFormSet = modelformset_factory(Choice, form=ChoiceForm, extra=0)
+    choices = problem.choice_set.all()
+    formset = choiceFormSet(request.POST or None, queryset=choices)
+    context = {
+        'problem': problem,
+        'form': form,
+        'formset': formset,
+    }
+    if all([form.is_valid(), formset.is_valid()]):
+        problem = form.save(commit=False)
+        problem.correct_choice = int(request.POST.get('answer', 1))
+        problem.save()
+        for form in formset:
+            choice = form.save(commit=False)
+            choice.problem = problem
+            choice.save()
+        return redirect('app:my_problem')
+    return render(request, 'app/edit_problem.html', context)
 
-def edit_problem(request):
+@login_required
+def show_myProblem(request):
     user = request.user
     problems = user.problem_set.all()
-    print(problems)
     context = {'problems': problems}
     return render(request, 'app/my_problem.html', context)
 
