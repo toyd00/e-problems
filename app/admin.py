@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject, Problem, Choice, Type, Like
+from .models import Subject, Title, Problem, Choice, Type, Like
 
 
 class ChoiceInLine(admin.StackedInline):
@@ -8,10 +8,15 @@ class ChoiceInLine(admin.StackedInline):
 
 class ProblemAdmin(admin.ModelAdmin):
     inlines = [ChoiceInLine]
-    list_display = ['id', '__str__']
+    list_display = ['__str__', 'id']
+
+class SubjectAdmin(admin.ModelAdmin):
+    model = Subject
+    list_display = ['name', 'id']
 
 
-admin.site.register(Subject)
+admin.site.register(Subject, SubjectAdmin)
+admin.site.register(Title)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Choice)
 admin.site.register(Type)
