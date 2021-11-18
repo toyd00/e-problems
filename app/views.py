@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 
 from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, RequiredFormset
-from .models import Subject, Problem, Choice, Like
+from .models import Subject, Problem, Choice, Like, Title
 
 from users.models import CustomUser
 
@@ -113,7 +113,6 @@ def like(request, pk):
         like.save()
 
     response['like_count'] = like.count
-    print(response)
     return JsonResponse(response)
 
 
@@ -130,10 +129,12 @@ def make_problem(request):
         'form': form,
         'formset': formset,
     }
+    print(request.POST)
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
         problem.user = request.user
-        problem.subject = subject
+        problem.subject = Subject.objects.get(id=request.POST.get('subject', 1))
+        problem.title = Title.objects.get(id=request.POST.get('title', 1))
         problem.like = Like.objects.create()
         problem.correct_choice = int(request.POST.get('answer', 1))
         problem.save()
@@ -160,6 +161,8 @@ def edit_problem(request, pk=None):
     }
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
+        problem.subject = Subject.objects.get(id=request.POST.get('subject', 1))
+        problem.title = Title.objects.get(id=request.POST.get('title', 1))
         problem.correct_choice = int(request.POST.get('answer', 1))
         problem.save()
         for form in formset:
@@ -168,6 +171,12 @@ def edit_problem(request, pk=None):
             choice.save()
         return redirect('app:my_problem')
     return render(request, 'app/edit_problem.html', context)
+
+
+def get_title(request):
+    print(request.POST)
+    return HttpResponse()
+
 
 @login_required
 def show_myProblem(request):

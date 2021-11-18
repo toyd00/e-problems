@@ -11,6 +11,7 @@ urlpatterns = [
     path('like/<int:pk>/', views.like, name='like'),
     path('make_problem/', views.make_problem, name='make_problem'),
     path('edit_problem/<int:pk>/', views.edit_problem, name='edit_problem'),
+    path('get_title/', views.get_title, name='get_title'),
     #path('delete_problem/<int:pk>/', views.delete_problem, name='delete_problem'),
     path('my_problem/', views.show_myProblem, name='my_problem'),
     path('test_result/<int:problem_count>/', views.score_test, name='test_result'),

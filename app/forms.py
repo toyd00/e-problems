@@ -22,7 +22,7 @@ class ProblemForm(forms.ModelForm):
     )
     class Meta:
         model = Problem
-        fields = ['subject', 'type', 'content']
+        fields = ['subject', 'title', 'type', 'content']
 
 
 class ChoiceForm(forms.ModelForm):
@@ -31,7 +31,6 @@ class ChoiceForm(forms.ModelForm):
         fields = ['content']
     content = forms.CharField(
         label="選択肢",
-        required=True,
         widget=forms.Textarea(attrs=({'rows': 3, 'cols': 60})),
         )
 
