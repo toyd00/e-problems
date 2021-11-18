@@ -1,16 +1,51 @@
 'use strict';
 
+/* 科目が選択された時にタイトルの選択肢を動的に変更 */
+{
+  $(document).on('change', '#id_subject', function(event) {
+    if (event) {
+      event.preventDefault();
+    }
+    console.log($('#id_subject').val())
+    $.ajax({
+      'url': $('#get_title').prop('action'),
+      'type': $('#get_title').prop('method'),
+      'data': {
+        'subject_id': $('#id_subject').val()
+      },
+      'dataType': 'json',
+    })
+    .done(function(response){
+
+    });
+  })
+}
+
+/* 作成完了ボタンを押した時に送信する部分のタグのform属性をdoneに変える */
+{
+  $(document.body).find('textarea, select, .answer, input')
+    .each(function(){
+      $(this).attr('form', 'done');
+    })
+}
+
+
+/* 一つ目の選択肢がデフォルトで選択されている */
 {
   $('#answer-1').attr('checked', true);
   $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');
 }
 
+/* 追加ボタンを押した時にフォーム・削除ボタン・ラジオボタン が追加される */
 {
   $(document).on('click', '.add', function(event) {
     if (event) {
       event.preventDefault();
     }
+    /* フォームの数 */
     const empty_form_count = $('.problem-form').length;
+
+    /* form_setにフォーム・削除ボタン・ラジオボタンをまとめる */
     const form_set = $('#form-set')
       .clone(true)
       .attr({
@@ -18,6 +53,7 @@
         class: 'form-set',
       })
 
+    /* フォーム */
     const empty_form = $('#empty-form').clone(true);
     empty_form
       .attr({
@@ -27,6 +63,7 @@
       .html(empty_form.html().replace(/__prefix__/g, empty_form_count))
       .appendTo(form_set);
 
+    /* 削除ボタン */
     $('#remove-button')
       .clone(true)
       .attr({
@@ -36,6 +73,7 @@
       })
       .appendTo(form_set);
 
+    /* 答えの選択肢を選ぶボタン */
     $('#answer-button')
       .clone(true)
       .attr({
@@ -45,10 +83,15 @@
         value: empty_form_count + 1,
       })
       .appendTo(form_set);
+
+    /* フォーム・削除ボタン・ラジオボタンをまとめたform_setを追加 */
     form_set.appendTo($('#options'))
     $('#id_form-TOTAL_FORMS').attr('value', empty_form_count + 1);
   })
+}
 
+/* 削除ボタンを押した時にフォーム・削除ボタン・ラジオボタンを削除 */
+{
   $(document).on('click', '.remove', function(event) {
     if (event) {
       event.preventDefault();
@@ -68,6 +111,7 @@
   })
 }
 
+/* 正解の選択肢をラジオボタンで制御 */
 {
   $(document).on('change', "input[type=radio][name=answer]", function() {
     $('#is-correct').remove()
@@ -77,12 +121,16 @@
   })
 }
 
+/* 作成完了ボタンが押された時のエラー処理と確認 */
 {
+  /* エラー処理 */
   $('#done').submit(function(event) {
     if ($("input[name='answer']:checked").val() === undefined) {
       alert("正解の選択肢を選んでください");
       return false;
     }
+
+    /* 確認の処理 */
     if (!confirm("問題作成を完了しますか？")) {
       return false;
     }
