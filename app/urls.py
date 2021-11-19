@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 app_name = 'app'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('user/<int:pk>/', views.user, name='user'),
+    path('my_page/', views.show_myPage, name='my_page'),
     path('subject/', views.subject, name='subject'),
     path('test/<int:pk>/', views.miniTest, name='test'),
     path('like/<int:pk>/', views.like, name='like'),

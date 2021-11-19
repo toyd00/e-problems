@@ -44,9 +44,16 @@ def signup(request):
 
 """ 関数名変更userPage """
 @login_required
-def user(request, pk):
-    user = get_object_or_404(CustomUser, pk=pk)
-    return render(request, 'app/user.html', {'user': user})
+def show_myPage(request):
+    user = request.user
+    making_problem_count = len(user.making_problem.all())
+    solving_problem_count = len(user.solving_problem.all())
+    print(making_problem_count, solving_problem_count)
+    context = {
+        'making_problem_count': making_problem_count,
+        'solving_problem_count': solving_problem_count,
+    }
+    return render(request, 'app/my_page.html', context)
 
 
 def subject(request):
@@ -82,6 +89,7 @@ def score_test(request, problem_count):
                 problem = Problem.objects.get(id=problem_id)
                 problems.append(problem)
                 if problem.correct_choice == selected_choice:
+                    problem.solving_user.set(request.user)
                     correct_count += 1
                     isCorrect_list1[p_c] = True
         isCorrect_list2 = copy.deepcopy(isCorrect_list1)
@@ -196,7 +204,7 @@ def get_title(request):
 @login_required
 def show_myProblem(request):
     user = request.user
-    problems = user.problem_set.all()
+    problems = user.making_problem.all()
     context = {'problems': problems}
     return render(request, 'app/my_problem.html', context)
 

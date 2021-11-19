@@ -34,7 +34,8 @@ class Like(models.Model):
 
 class Problem(models.Model):
     type = models.ForeignKey(verbose_name="問題の難易度", to=Type, max_length=20, on_delete=PROTECT)
-    user = models.ForeignKey(verbose_name="問題を作成したユーザ", to='users.CustomUser', on_delete=PROTECT)
+    user = models.ForeignKey(verbose_name="問題を作成したユーザ", to='users.CustomUser', on_delete=PROTECT, related_name='making_problem')
+    solving_user = models.ManyToManyField(verbose_name="問題を解いたユーザ", to='users.CustomUser', related_name='solving_problem')
     subject = models.ForeignKey(verbose_name="科目", to=Subject, on_delete=models.PROTECT)
     title = models.ForeignKey(to=Title, on_delete=models.CASCADE)
     content = models.TextField("問題文", default="次のうちから正しいものを１つ選びなさい")

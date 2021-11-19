@@ -1,0 +1,9 @@
+{% extends 'app/base.html' %}
+{% load static  %}
+
+
+{% block content %}
+    <h1>{{ request.user.username }}さんのマイページ</h1>
+    <h3>作成した問題数：{{  making_problem_count }}</h3>
+    <h3>解いた問題数：{{ solving_problem_count }}</h3>
+{% endblock  %}
