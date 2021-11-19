@@ -4,7 +4,7 @@
 
   $('.like_button').on('click', function(e) {
     if (e){
-    e.preventDefault();
+      e.preventDefault();
     }
     const problem_pk = $(this).data('id');
 

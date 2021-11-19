@@ -40,6 +40,9 @@ def signup(request):
         form = CustomUserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
 
+
+
+""" 関数名変更userPage """
 @login_required
 def user(request, pk):
     user = get_object_or_404(CustomUser, pk=pk)
@@ -172,15 +175,21 @@ def edit_problem(request, pk=None):
         return redirect('app:my_problem')
     return render(request, 'app/edit_problem.html', context)
 
+def delete_problem(request, pk):
+    problem = get_object_or_404(Problem, pk=pk)
+    problem.delete()
+    print(problem)
+    return redirect('app:my_problem')
+
 
 def get_title(request):
-    subject_id = request.POST.get('subject_id', 1)
-    subject = Subject.objects.get(id=subject_id)
-    print(subject)
-    titles = subject.title_set.all()
+    subject_id = request.POST.get('subject_id', 0)
     response = {}
-    for title in titles:
-        response[title.id] = title.name
+    if int(subject_id) > 0:
+        subject = Subject.objects.get(id=subject_id)
+        titles = subject.title_set.all()
+        for title in titles:
+            response[title.id] = title.name
     return JsonResponse(response)
 
 

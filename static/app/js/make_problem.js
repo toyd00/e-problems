@@ -5,7 +5,10 @@
   $('#id_subject').find('option').eq(0).remove();
   $('<option>')
     .text("問題の分野を選択してください")
-    .prop('selected', true)
+    .prop({
+      'selected': true,
+      'value': -1,
+    })
     .prependTo('#id_subject')
 
 
@@ -169,6 +172,13 @@
 
     /* 確認の処理 */
     if (!confirm("問題作成を完了しますか？")) {
+      return false;
+    }
+  })
+}
+{
+  $(document).on('click','#remove-button', function() {
+    if (!confirm('本当に削除しますか？')) {
       return false;
     }
   })
