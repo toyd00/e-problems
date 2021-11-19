@@ -6,7 +6,11 @@
   <form id='get_title' method='post' action="{% url 'app:get_title' %}">{% csrf_token %}
       <p><label>分野：{{ form.subject }}</label></p>
   </form>
-  <p><label>タイトル：{{ form.title }}</label></p>
+  <label>タイトル：
+      <select name="title" required id="id_title" form="done">
+          <option>まず分野を選択してください</option>
+      </select>
+  </label>
   <p><label>問題の難易度：{{ form.type }}</label></p>
   <p><label>問題文：{{ form.content }}</label></p>
 

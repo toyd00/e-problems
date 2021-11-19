@@ -1,11 +1,32 @@
 'use strict';
 
+/* 分野と難易度の初期値を変更 */
+{
+  $('#id_subject').find('option').eq(0).remove();
+  $('<option>')
+    .text("問題の分野を選択してください")
+    .prop('selected', true)
+    .prependTo('#id_subject')
+
+
+  $('#id_type').find('option').eq(0).remove();
+  $('<option>')
+    .text("問題の難易度を選択してください")
+    .prop('selected', true)
+    .prependTo('#id_type')
+}
+
 /* 科目が選択された時にタイトルの選択肢を動的に変更 */
 {
   $(document).on('change', '#id_subject', function(event) {
     if (event) {
       event.preventDefault();
     }
+
+    $('#id_title').find('option').each(function (index, value){
+      value.remove()
+    })
+
     console.log($('#id_subject').val())
     $.ajax({
       'url': $('#get_title').prop('action'),
@@ -16,7 +37,23 @@
       'dataType': 'json',
     })
     .done(function(response){
+      $('<option>')
+        .text("問題のタイトルを選択してください")
+        .prop('selected', true)
+        .appendTo('#id_title')
 
+      $.each(response, function(index, value){
+        $('<option>')
+          .val(index)
+          .text(value)
+          .appendTo('#id_title');
+      })
+    })
+    .fail(function() {
+      $('<option>')
+        .text("まず問題の分野を選択してください")
+        .prop('selected', true)
+        .prependTo('#id_title')
     });
   })
 }
@@ -30,7 +67,7 @@
 }
 
 
-/* 一つ目の選択肢がデフォルトで選択されている */
+/* 一つ目の選択肢がデフォルトで選択されている状態にする */
 {
   $('#answer-1').attr('checked', true);
   $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');

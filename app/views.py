@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.query import QuerySet
 from django.forms import formset_factory
 from django.forms.models import modelformset_factory
+from django.http import response
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
@@ -129,7 +130,6 @@ def make_problem(request):
         'form': form,
         'formset': formset,
     }
-    print(request.POST)
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
         problem.user = request.user
@@ -174,8 +174,14 @@ def edit_problem(request, pk=None):
 
 
 def get_title(request):
-    print(request.POST)
-    return HttpResponse()
+    subject_id = request.POST.get('subject_id', 1)
+    subject = Subject.objects.get(id=subject_id)
+    print(subject)
+    titles = subject.title_set.all()
+    response = {}
+    for title in titles:
+        response[title.id] = title.name
+    return JsonResponse(response)
 
 
 @login_required
