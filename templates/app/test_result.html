@@ -3,11 +3,24 @@
 
 {% block content %}
     <h1>テスト結果</h1>
-    <h1 id='correct-count'>{{ correct_count }}個正解です。</h1>
+    
+    {% if request.user.is_authenticated %}
+        <h1 id='correct-count'>{{ request.user.username }}さん、{{ correct_count }}個正解です。</h1>
+        <form action="{% url 'app:index' %}">
+            <button>ホーム画面へ</button>
+        </form>
+    {% else %}
+        <h1 id='correct-count'>匿名ユーザさん、{{ correct_count }}個正解です。</h1>
+        <h3>ログインしてさらに楽しみましょう！！</h3>
+        <form action="{% url 'app:login' %}">
+            <button>ログインページへ</button>
+        </form>
+        <p>または新規登録しますか？</p>
+        <form action="{% url 'app:signup' %}">
+            <button>新規登録へ</button>
+        </form>
+    {% endif %}
 
-    <form action="{% url 'app:index' %}">
-        <button>マイページへ</button>
-    </form>
 
     <h1>テストの答え</h1>
     {% for problem in problems %}

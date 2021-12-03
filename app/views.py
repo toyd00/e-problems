@@ -1,4 +1,5 @@
 import copy
+import random
 
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login
@@ -18,6 +19,7 @@ from users.models import CustomUser
 
 
 def index(request):
+    print(CustomUser.objects.get(username="匿名ユーザ"))
     subjects = Subject.objects.all()
     return render(request, 'app/index.html', {'subjects': subjects})
 
@@ -41,8 +43,6 @@ def signup(request):
     return render(request, 'app/signup.html', {'form': form})
 
 
-
-""" 関数名変更userPage """
 @login_required
 def show_myPage(request):
     user = request.user
@@ -60,8 +60,8 @@ def subject(request):
     subject_list = Subject.objects.all()
     return render(request, 'app/subject.html', {'subject_list': subject_list})
 
-
-def miniTest(request, pk):
+""" 問題の保持で悩む selection_test, score_selection_test"""
+def selection_test(request, pk):
     subject = Subject.objects.get(pk=pk)
     problems = subject.problem_set.all()
     problemID_list = []
@@ -72,10 +72,11 @@ def miniTest(request, pk):
         'problems': problems,
         'problemID_list': problemID_list,
     }
-    return render(request, 'app/mini_test.html', context)
+    return render(request, 'app/selection_test.html', context)
 
-@login_required
-def score_test(request, problem_count):
+
+#@login_required
+def score_selection_test(request, problem_count):
     if request.method == 'POST':
         correct_count = 0
         problems = []
@@ -89,9 +90,10 @@ def score_test(request, problem_count):
                 problem = Problem.objects.get(id=problem_id)
                 problems.append(problem)
                 if problem.correct_choice == selected_choice:
-                    problem.solving_user.set(request.user)
                     correct_count += 1
                     isCorrect_list1[p_c] = True
+                    if request.user.is_authenticated:
+                        problem.solving_user.set(request.user)
         isCorrect_list2 = copy.deepcopy(isCorrect_list1)
         isCorrect_list1.reverse()
         isCorrect_list2.reverse()
@@ -106,6 +108,26 @@ def score_test(request, problem_count):
         return render(request, 'app/test_result.html', context)
     else:
         return redirect('app:index')
+
+
+
+""" def automatically_make_avg_problem(request):
+    list_size = random.randrange(3, 10)
+    number_list = ans_list = [0 for _ in range(list_size)]
+    for i in range(list_size):
+        number_list[i] = random.randrange(-50, 50)
+        ans_list[i] = sum(number_list) // list_size
+    q_text = f"{number_list}の平均を求めて小数第一位を切り捨てて整数で答えなさい."
+    context = {
+        'q_text': q_text,
+        'number_list': number_list,
+        'ans_list': ans_list
+    }
+    return render(request, 'app/math_test.html', context)
+
+
+def score_math_test(request):
+    pass """
 
 
 @login_required
@@ -128,7 +150,7 @@ def like(request, pk):
     return JsonResponse(response)
 
 
-@login_required
+#@login_required
 def make_problem(request):
     form = ProblemForm(request.POST or None)
     choiceFormSet = formset_factory(
@@ -143,7 +165,11 @@ def make_problem(request):
     }
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
-        problem.user = request.user
+        if request.user.is_authenticated:
+            problem.user = request.user
+        else:
+            problem.uesr = CustomUser.objects.get(username="匿名ユーザ")
+            problem.user_id = CustomUser.objects.get(username="匿名ユーザ").id
         problem.subject = Subject.objects.get(id=request.POST.get('subject', 1))
         problem.title = Title.objects.get(id=request.POST.get('title', 1))
         problem.like = Like.objects.create()

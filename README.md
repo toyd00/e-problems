@@ -1,6 +1,6 @@
 # learning_app  
 
-・URL（AWS, Nginx, Gunicornを用いてデプロイ）  
+・URL（AWS EC2＋Nginx（webサーバ）＋ Gunicorn（appサーバ））  
 http://13.112.218.57/
 
 テストアカウント  

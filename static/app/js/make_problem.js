@@ -76,7 +76,7 @@
   $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');
 }
 
-/* 追加ボタンを押した時にフォーム・削除ボタン・ラジオボタン が追加される */
+/* 追加ボタンを押した時の挙動：フォーム・削除ボタン・ラジオボタン が追加される */
 {
   $(document).on('click', '.add', function(event) {
     if (event) {
@@ -84,6 +84,14 @@
     }
     /* フォームの数 */
     const empty_form_count = $('.problem-form').length;
+    console.log(empty_form_count)
+
+    /* 選択肢の数の上限を８個に制限 */
+    if (empty_form_count === 8) {
+      alert("選択肢は８個以上増やせません");
+      return
+    }
+  
 
     /* form_setにフォーム・削除ボタン・ラジオボタンをまとめる */
     const form_set = $('#form-set')

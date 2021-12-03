@@ -36,17 +36,18 @@
       <br />
 
 
-  {% if name == "make" %}
-      <form method='post' class={{ name }} action="{% url 'app:make_problem'  %}" id='done'>{% csrf_token %}
-          {{ formset.management_form }}
-          <input type='submit' value="作成完了">
-      </form>
-  {% else %}
-      <form method='post' class={{ name }} action="{% url 'app:edit_problem' pk=problem.pk %}" id='done'>{% csrf_token %}
-          {{ formset.management_form }}
-          <input type='submit' value="作成完了">
-      </form>
-  {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <form method='post' class='{{ name }}' action="{% url 'app:edit_problem' pk=problem.pk %}" id='done'>{% csrf_token %}
+        {{ formset.management_form }}
+            <input type='submit' value="作成完了">
+        </form>
+    {% else %}
+        <form method='post' class='{{ name }}' action="{% url 'app:index' %}" id='done'>{% csrf_token %}
+        {{ formset.management_form }}
+            <input type='submit' value="作成完了">
+        </form>
+    {% endif %}
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
