@@ -7,6 +7,7 @@
     {% for problem in problems %}
     <fieldset>
         <p>{{ problem.content }}</p>
+        <p>作成者：{{ problem.user.username }}</p>
         <input type='text' class='hidden' name='problemID-{{ forloop.counter }}' value={{ problem.id }} form='choice'>
         {% for choice in problem.choice_set.all %}
             <label><input type='radio' name='choice-{{ forloop.parentloop.counter }}' value="{{ forloop.counter }}" form='choice'>{{ forloop.counter }}、{{ choice.content }}</label>

@@ -150,7 +150,7 @@ def like(request, pk):
     return JsonResponse(response)
 
 
-#@login_required
+@login_required
 def make_problem(request):
     form = ProblemForm(request.POST or None)
     choiceFormSet = formset_factory(
@@ -165,16 +165,13 @@ def make_problem(request):
     }
     if all([form.is_valid(), formset.is_valid()]):
         problem = form.save(commit=False)
-        if request.user.is_authenticated:
-            problem.user = request.user
-        else:
-            problem.uesr = CustomUser.objects.get(username="匿名ユーザ")
-            problem.user_id = CustomUser.objects.get(username="匿名ユーザ").id
+        problem.user = request.user
         problem.subject = Subject.objects.get(id=request.POST.get('subject', 1))
         problem.title = Title.objects.get(id=request.POST.get('title', 1))
         problem.like = Like.objects.create()
         problem.correct_choice = int(request.POST.get('answer', 1))
         problem.save()
+        print(problem.user)
         for form in formset:
             choice = form.save(commit=False)
             choice.problem = problem
