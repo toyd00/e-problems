@@ -1,0 +1,44 @@
+#sign_list {
+    position: relative;
+    top: 10px;
+}
+
+.remove_sing_display {
+    margin-right: 20px;
+    border: 1px solid black;
+    border-radius:5px ;
+}
+
+.formula, .ans {
+    display: inline;
+}
+
+#btn_make_prob {
+    position: absolute;
+    top: 180px;
+}
+
+.formula {
+    padding-right: 5px;
+}
+
+.ans {
+    left: 80px;
+    width: 70px;
+}
+
+#content {
+    position: relative;
+    top: 100px;
+}
+
+#show_result {
+    position: absolute;
+    top: 500px
+}
+
+.hidden {
+    display: none;
+}
+
+

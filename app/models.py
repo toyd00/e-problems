@@ -20,6 +20,7 @@ class Title(models.Model):
         return self.name
 
 
+
 class Type(models.Model):
     name = models.CharField("問題難易度", max_length=20, default="易しい")
 

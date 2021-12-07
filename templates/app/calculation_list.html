@@ -1,0 +1,49 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+    <button id='add_0' class='add_sign'>
+        足し算+
+    </button>
+    <button id='sub_1' class='add_sign'>
+        引き算ー
+    </button class='btn'>
+    <button id='mul_2' class='add_sign'>
+        掛け算×
+    </button>
+    <button id='div_3' class='add_sign'>
+        割り算÷
+    </button>
+
+    <br />
+    <div id='sign_list'>
+    </div>
+
+    <div id='problem'>
+        <button id='btn_make_prob' class='btn_make_prob'>
+            問題作成
+        </button>
+
+        <div id='content'>
+        </div>
+    </div>
+
+    <div id='result'>
+        <form id='calTest_result' type='submit' method='post' action="{% url 'app:calTest_result' %}">{% csrf_token %}
+            <button id='show_result' class='show_result'>
+                結果を見る
+            </button>
+        </form>
+        <div id ='result_content'>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script type='text/javascript' src="{% static 'app/js/base.js' %}"></script>
+    <script type='text/javascript' src="{% static 'app/js/calculation_test.js' %}"></script>
+{% endblock content %}

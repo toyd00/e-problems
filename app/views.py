@@ -60,6 +60,9 @@ def subject(request):
     subject_list = Subject.objects.all()
     return render(request, 'app/subject.html', {'subject_list': subject_list})
 
+def calculation_list(request):
+    return render(request, 'app/calculation_list.html')
+
 """ 問題の保持で悩む selection_test, score_selection_test"""
 def selection_test(request, pk):
     subject = Subject.objects.get(pk=pk)
@@ -110,24 +113,16 @@ def score_selection_test(request, problem_count):
         return redirect('app:index')
 
 
-
-""" def automatically_make_avg_problem(request):
-    list_size = random.randrange(3, 10)
-    number_list = ans_list = [0 for _ in range(list_size)]
-    for i in range(list_size):
-        number_list[i] = random.randrange(-50, 50)
-        ans_list[i] = sum(number_list) // list_size
-    q_text = f"{number_list}の平均を求めて小数第一位を切り捨てて整数で答えなさい."
+def calTest_result(request):
+    print(request.POST)
     context = {
-        'q_text': q_text,
-        'number_list': number_list,
-        'ans_list': ans_list
+        'is_correct': request.POST.get('is_correct'),
+        'correct_count': request.POST.get('correct_count'),
+        'a_list': request.POST.get('a_list'),
+        'b_list': request.POST.get('b_list'),
+        'sign_list': request.POST.get('sign_list'),
     }
-    return render(request, 'app/math_test.html', context)
-
-
-def score_math_test(request):
-    pass """
+    return render(request, 'app/calTest_result.html', context)
 
 
 @login_required
