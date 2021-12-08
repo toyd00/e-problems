@@ -19,7 +19,6 @@ from users.models import CustomUser
 
 
 def index(request):
-    print(CustomUser.objects.get(username="匿名ユーザ"))
     subjects = Subject.objects.all()
     return render(request, 'app/index.html', {'subjects': subjects})
 
