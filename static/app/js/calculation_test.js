@@ -12,12 +12,12 @@
     var is_select = [false, false, false, false]
     var is_made = false
 
-
+    /* --------------------------------------------------------- */
     /* 符号を追加する */
     $(document).on('click', '.add_sign', function(event) {
         const i = $(this).attr('id').slice(-1)
-        if ($('#sign_list').children('p').length > 0) {
-            $('#sign_list').children('p')[0].remove()
+        if ($('#noSign_alert')) {
+            $('#noSign_alert').remove()
         }
         if (is_select[i] || is_made) {
             return
@@ -33,6 +33,18 @@
         }
     })
 
+    /* 符号が選択できていないことを表す関数 */
+    function noSign_alert() {
+        if (!$('#noSign_alert').length) {
+            $('<span></span>', {
+                id: 'noSign_alert'
+            })
+            .text("※どの符号の計算をするか選んでください")
+            .appendTo($('#sign_list'))
+        }
+        return
+    }
+
     /* 符号を取り消す */
     $(document).on('click', '.remove_sing_display', function(event) {
         if (is_made) {
@@ -41,8 +53,12 @@
         $(this).remove()
         const i = $(this).attr('id').slice(-1)
         is_select[i] = false
+        if (selectedSign_count(is_select) === 0) {
+            noSign_alert()
+        }
     })
 
+    /* --------------------------------------------------------- */
     /* 選ばれた符号の数を求める関数 */
     function selectedSign_count(is_select) {
         var divide = 0
@@ -84,17 +100,7 @@
     }
 
 
-    /* 符号が選択できていないことを表す関数 */
-    function noSign_alert() {
-        if ($('#sign_list').children('p').length === 0) {
-            $('<p></p>')
-            .text("※どの符号の計算をするか選んでください")
-            .appendTo($('#sign_list'))
-        }
-        return
-    }
-
-
+    /* 数式を作る関数 */
     function create_formula(sign_list, i) {
         if (sign_list[i] === '÷') {
             html = `<span class='num_left'>${a_list[i] * b_list[i]}</span> ${sign_list[i]} <span class='num_right'>${b_list[i]}</span> = `
@@ -105,17 +111,23 @@
 
         $('<p></p>', {
             'class': 'formula',
+            id: `formula_${i}`
         })
         .html(html)
         .appendTo('#content')
     }
 
+
     /* 問題を実際に作成する */
     var sign_list = [], a_list = [], b_list = []
-    $(document).on('click', '.btn_make_prob', function(event) {
+    $(document).on('click', '#btn_make_prob', function(event) {
         if (selectedSign_count(is_select) === 0) {
             noSign_alert()
+            return
         }
+
+        $('#show_result').attr({'class': 'show_result'})
+        $('#btn_make_prob').attr({'class': 'hidden'})
 
 
         if (!is_made && selectedSign_count(is_select) !== 0) {
@@ -142,6 +154,9 @@
         }
     })
 
+    /* --------------------------------------------------------- */
+    /* 採点を行う */
+
     function score_test(problem_count) {
         var is_correct = [], correct_count = 0
         var correct
@@ -160,7 +175,6 @@
             }
 
             if (Number($(`#ans_${i}`).val()) === correct) {
-                console.log($(`#ans_${i}`).val(), correct)
                 is_correct.push(true)
                 correct_count += 1
             }
@@ -171,12 +185,30 @@
         return [is_correct, correct_count]
     }
 
-    $(document).on('click', '#show_result', function() {
+    /* 採点結果を表示 */
+    $(document).on('click', '#show_result', function(event) {
+        if (event){
+            event.preventDefault();
+        }
+        $('#show_result').attr('disabled', true)
+        $('input').attr('disabled', true)
+
         problem_count = 10
         const [is_correct, correct_count] = score_test(problem_count)
+
         $('<p></p>')
         .text(`${correct_count}問正解です`)
-        .appendTo($('#result_content'))
+        .appendTo($('#content'))
+
+        for (var i = 0; i < problem_count; i++) {
+            if (is_correct[i]) {
+                $(`#formula_${i}`).addClass('green')
+            }
+            else {
+                $(`#formula_${i}`).addClass('red')
+            }
+        }
+
         $.ajax({
             'url': $('#calTest_result').prop('action'),
             'type': $('#calTest_result').prop('method'),
@@ -191,24 +223,8 @@
             'dataType': 'json',
         })
         .done(function(response){
-            console.log(response)
         })
         .fail(function(){
-
         })
     })
-
-
-
-
-            /* var correct_count = 0
-            for (var i = 0; i < 10; i++) {
-                if ($(`add_ans_${i}`).val() === a_list[i] + b_list[i]) {
-                    correct_count += 1
-                }
-            }
-            $('<h3></h3>')
-                .text(correct_count)
-                .appendTo('#content') */
-
 }

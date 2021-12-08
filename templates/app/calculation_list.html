@@ -19,25 +19,20 @@
 
     <br />
     <div id='sign_list'>
+        <span id='noSign_alert'>※どの符号の計算をするか選んでください</span>
     </div>
 
-    <div id='problem'>
-        <button id='btn_make_prob' class='btn_make_prob'>
-            問題作成
+
+    <button id='btn_make_prob' class='btn_make_prob'>
+        問題作成
+    </button>
+    <form id='calTest_result' type='submit' method='post' action="{% url 'app:calTest_result' %}">{% csrf_token %}
+        <button id='show_result' class='hidden'>
+            結果を見る
         </button>
+    </form>
 
-        <div id='content'>
-        </div>
-    </div>
-
-    <div id='result'>
-        <form id='calTest_result' type='submit' method='post' action="{% url 'app:calTest_result' %}">{% csrf_token %}
-            <button id='show_result' class='show_result'>
-                結果を見る
-            </button>
-        </form>
-        <div id ='result_content'>
-        </div>
+    <div id='content'>
     </div>
 
 

@@ -1,6 +1,6 @@
 #sign_list {
-    position: relative;
-    top: 10px;
+    position: absolute;
+    top: 130px;
 }
 
 .remove_sing_display {
@@ -14,8 +14,8 @@
 }
 
 #btn_make_prob {
-    position: absolute;
-    top: 180px;
+    position: relative;
+    top: 100px;
 }
 
 .formula {
@@ -33,12 +33,20 @@
 }
 
 #show_result {
-    position: absolute;
-    top: 500px
+    position: relative;
+    top: 100px;
 }
 
 .hidden {
     display: none;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
 }
 
 

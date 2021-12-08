@@ -114,15 +114,14 @@ def score_selection_test(request, problem_count):
 
 
 def calTest_result(request):
-    print(request.POST)
-    context = {
+    response = {
         'is_correct': request.POST.get('is_correct'),
         'correct_count': request.POST.get('correct_count'),
         'a_list': request.POST.get('a_list'),
         'b_list': request.POST.get('b_list'),
         'sign_list': request.POST.get('sign_list'),
     }
-    return render(request, 'app/calTest_result.html', context)
+    return JsonResponse(response)
 
 
 @login_required
