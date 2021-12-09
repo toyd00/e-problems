@@ -95,7 +95,7 @@ def score_selection_test(request, problem_count):
                     correct_count += 1
                     isCorrect_list1[p_c] = True
                     if request.user.is_authenticated:
-                        problem.solving_user.set(request.user)
+                        problem.solving_user.add(request.user)
         isCorrect_list2 = copy.deepcopy(isCorrect_list1)
         isCorrect_list1.reverse()
         isCorrect_list2.reverse()
