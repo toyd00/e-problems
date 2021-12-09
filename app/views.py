@@ -36,7 +36,7 @@ def signup(request):
             )
             if new_user is not None:
                 login(request, new_user)
-                return redirect('app:user', pk=new_user.pk)
+                return redirect('app:my_page')
     else:
         form = CustomUserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
