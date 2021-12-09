@@ -1,7 +1,7 @@
 # learning_app  
 
-・URL（AWS EC2＋Nginx（webサーバ）＋ Gunicorn（appサーバ））  
-http://13.112.218.57/
+・URL（AWS (EC2, Route53...)＋Nginx（webサーバ）＋ Gunicorn（appサーバ））  
+https://e-problems.net/
 
 テストアカウント  
 メールアドレス：test@gmail.com  
@@ -38,7 +38,6 @@ Twitterで問題を共有するためのボタン
 分からない問題の質問を行う機能の追加  
 問題の解説をつける  
 Vue.jsとWebAPIを用いたSPA化  
-SSL接続を可能にする  
 インフラのコード化  
 テストコードを書く
 
