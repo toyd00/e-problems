@@ -2,21 +2,22 @@
 
 /* 分野と難易度の初期値を変更 */
 {
-  $('#id_subject').find('option').eq(0).remove();
-  $('<option>')
-    .text("問題の分野を選択してください")
-    .prop({
-      'selected': true,
-      'value': -1,
-    })
-    .prependTo('#id_subject')
+  if ($('#display').prop('data-id') === 'make') {
+      $('#id_subject').find('option').eq(0).remove();
+      $('<option>')
+        .text("問題の分野を選択してください")
+        .prop({
+          'selected': true,
+          'value': -1,
+        })
+        .prependTo('#id_subject')
 
-
-  $('#id_type').find('option').eq(0).remove();
-  $('<option>')
-    .text("問題の難易度を選択してください")
-    .prop('selected', true)
-    .prependTo('#id_type')
+      $('#id_type').find('option').eq(0).remove();
+      $('<option>')
+        .text("問題の難易度を選択してください")
+        .prop('selected', true)
+        .prependTo('#id_type')
+  }
 }
 
 /* 科目が選択された時にタイトルの選択肢を動的に変更 */

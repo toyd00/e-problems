@@ -2,14 +2,23 @@
 {% load static %}
 
 {% block content %}
-    <div class="my-rating"></div>
+
+    {% if name == 'meke' %}
+        <h2 id='display' data-id='make'>問題を作成する</h2>
+    {% endif %}
+        <h2 id='display' data-id='edit'>問題を編集する</h2>
+
     <form id='get_title' method='post' action="{% url 'app:get_title' %}">{% csrf_token %}
         <p><label>分野：{{ form.subject }}</label></p>
     </form>
     <label>タイトル：
-        <select name="title" required id="id_title" form="done">
-            <option>まず分野を選択してください</option>
-        </select>
+        {% if  name == 'make' %}
+            <select name="title" required id="id_title" form="done">
+                <option>まず分野を選択してください</option>
+            </select>
+        {% else %}
+            <label>{{ form.title }}</label>
+        {% endif %}
     </label>
     <p><label>問題の難易度：{{ form.type }}</label></p>
     <p><label>問題文：{{ form.content }}</label></p>

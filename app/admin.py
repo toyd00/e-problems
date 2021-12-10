@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Subject, Title, Problem, Choice, Type, Like
+from .models import Subject, Title, Problem, Choice, Type, Like #SchoolYear
 
 
 class ChoiceInLine(admin.StackedInline):
@@ -21,3 +21,4 @@ admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Choice)
 admin.site.register(Type)
 admin.site.register(Like)
+#admin.site.register(SchoolYear)

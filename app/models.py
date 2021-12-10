@@ -4,6 +4,14 @@ from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import DateField
 
+
+""" class SchoolYear(models.Model):
+    school_year = models.IntegerField()
+
+    def __str__(self):
+        return str(self.school_year) """
+
+
 class Subject(models.Model):
     name = models.CharField("分野", max_length=50)
     explain = models.TextField("分野に関する説明", max_length=400, blank=True)
@@ -34,6 +42,7 @@ class Like(models.Model):
     count = models.IntegerField("いいねの数", default=0)
 
 class Problem(models.Model):
+    #school_year = models.ForeignKey(to=SchoolYear, on_delete=PROTECT)
     type = models.ForeignKey(verbose_name="問題の難易度", to=Type, max_length=20, on_delete=PROTECT)
     user = models.ForeignKey(verbose_name="問題を作成したユーザ", to='users.CustomUser', on_delete=PROTECT, related_name='making_problem')
     solving_user = models.ManyToManyField(verbose_name="問題を解いたユーザ", to='users.CustomUser', related_name='solving_problem')
