@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
 from django.db.models.fields import DateField
+from django.forms.fields import BooleanField
 
 
 """ class SchoolYear(models.Model):
@@ -62,3 +63,12 @@ class Choice(models.Model):
 
     def __str__(self):
         return "Question:" + self.problem.content + "\nSelect" + self.content
+
+
+class Calculation_Problem(models.Model):
+    solving_user = models.ManyToManyField('users.CustomUser')
+    correct_count = models.IntegerField()
+    add = models.BooleanField(default=False)
+    sub = models.BooleanField(default=False)
+    mul = models.BooleanField(default=False)
+    div = models.BooleanField(default=False)

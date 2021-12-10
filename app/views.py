@@ -13,7 +13,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 
 from .forms import CustomUserCreationForm, ContactForm, ProblemForm, ChoiceForm, RequiredFormset
-from .models import Subject, Problem, Choice, Like, Title
+from .models import Subject, Problem, Choice, Like, Title, Calculation_Problem
 
 from users.models import CustomUser
 
@@ -47,10 +47,12 @@ def show_myPage(request):
     user = request.user
     making_problem_count = len(user.making_problem.all())
     solving_problem_count = len(user.solving_problem.all())
-    print(making_problem_count, solving_problem_count)
+    calTest_result_list = user.calculation_problem_set.all()
+
     context = {
         'making_problem_count': making_problem_count,
         'solving_problem_count': solving_problem_count,
+        'calTest_result_list': calTest_result_list,
     }
     return render(request, 'app/my_page.html', context)
 
@@ -112,15 +114,15 @@ def score_selection_test(request, problem_count):
         return redirect('app:index')
 
 
-def calTest_result(request):
-    response = {
-        'is_correct': request.POST.get('is_correct'),
-        'correct_count': request.POST.get('correct_count'),
-        'a_list': request.POST.get('a_list'),
-        'b_list': request.POST.get('b_list'),
-        'sign_list': request.POST.get('sign_list'),
-    }
-    return JsonResponse(response)
+def score_calTest(request):
+    cal_problem = Calculation_Problem.objects.create(
+        correct_count = request.POST.get('correct_count')
+    )
+    is_select = [True if req == 'true' else False for req in request.POST.getlist('is_select')]
+    cal_problem.add, cal_problem.sub, cal_problem.mul, cal_problem.div = is_select
+    cal_problem.solving_user.add(request.user)
+    cal_problem.save()
+    return HttpResponse()
 
 
 @login_required

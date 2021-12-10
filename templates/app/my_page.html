@@ -6,4 +6,25 @@
     <h1>{{ request.user.username }}さんのマイページ</h1>
     <h3>作成した問題数：{{  making_problem_count }}</h3>
     <h3>解いた問題数：{{ solving_problem_count }}</h3>
+    <br />
+    <h3>計算テストの結果</h3>
+    <fieldset>
+    {% for calTest_result in calTest_result_list  %}
+        {% if calTest_result.add %}
+            <span>足し算</span>
+        {% endif %}
+        {% if calTest_result.sub %}
+            <span>引き算</span>
+        {% endif %}
+        {% if calTest_result.mul %}
+            <span>かけ算</span>
+        {% endif %}
+        {% if calTest_result.div %}
+            <span>割り算</span>
+        {% endif %}
+
+        <br />
+        正解数：{{ calTest_result.correct_count }}／１０
+    {% endfor %}
+    </fieldset>
 {% endblock  %}

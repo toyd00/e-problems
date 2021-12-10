@@ -174,7 +174,7 @@
                 correct = a_list[i]
             }
 
-            if (Number($(`#ans_${i}`).val()) === correct) {
+            if (parseFloat($(`#ans_${i}`).val()) === correct) {
                 is_correct.push(true)
                 correct_count += 1
             }
@@ -214,10 +214,7 @@
             'type': $('#calTest_result').prop('method'),
             'data': {
                 'correct_count': correct_count,
-                'a_list': a_list,
-                'b_list': b_list,
-                'sign_list': sign_list,
-                'is_correct': is_correct,
+                'is_select': is_select,
             },
             traditional: true,
             'dataType': 'json',
