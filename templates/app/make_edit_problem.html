@@ -24,7 +24,12 @@
     <p><label>問題文：{{ form.content }}</label></p>
 
     <div id='options'>
-        <h2 id='ans-choice'>正解の選択肢：１</h2>
+        {% if name == 'make' %}
+            <h2 id='ans-choice'>正解の選択肢：１</h2>
+        {% else %}
+            <h2 id='ans-choice'>正解の選択肢：{{ problem.correct_choice }}</h2>
+        {% endif %}
+
         {% for form in formset %}
             <div id='form-set-{{ forloop.counter }}' class='form-set'>
                 <div class="problem-form" id='form-{{ forloop.counter }}' style='margin-right:10px;'>

@@ -73,8 +73,15 @@
 
 /* 一つ目の選択肢がデフォルトで選択されている状態にする */
 {
-  $('#answer-1').attr('checked', true);
-  $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');
+  if ($('#display').prop('data-id') === 'make') {
+    $('#answer-1').attr('checked', true);
+    $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');
+  }
+  else {
+    const correct_choice = $('#ans-choice').text().slice(-1)
+    $(`#answer-${correct_choice}`).attr('checked', true);
+    $(`#form-set-${correct_choice}`).append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');
+  }
 }
 
 /* 追加ボタンを押した時の挙動：フォーム・削除ボタン・ラジオボタン が追加される */
