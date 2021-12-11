@@ -3,10 +3,11 @@
 
 {% block content %}
 
-    {% if name == 'meke' %}
+    {% if name == 'make' %}
         <h2 id='display' data-id='make'>問題を作成する</h2>
-    {% endif %}
+    {% else %}
         <h2 id='display' data-id='edit'>問題を編集する</h2>
+    {% endif %}
 
     <form id='get_title' method='post' action="{% url 'app:get_title' %}">{% csrf_token %}
         <p><label>分野：{{ form.subject }}</label></p>

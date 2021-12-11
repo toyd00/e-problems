@@ -73,7 +73,7 @@
 
 /* 一つ目の選択肢がデフォルトで選択されている状態にする */
 {
-  if ($('#display').prop('data-id') === 'make') {
+  if ($('#display').data('id') === 'make') {
     $('#answer-1').attr('checked', true);
     $('#form-set-1').append('<p id="is-correct" style="display:inline;">正解の選択肢</p>');
   }
