@@ -39,9 +39,16 @@ class ChoiceForm(forms.ModelForm):
         )
 
 class ContactForm(forms.Form):
-    subject = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    message = forms.CharField(widget=Textarea)
+    subject = forms.CharField(
+        label="件名",
+        max_length=100,
+        widget=forms.Textarea(attrs=({'rows': 1, 'cols': 40}))
+    )
+    email = forms.EmailField(
+        label="メールアドレス",
+        widget=forms.Textarea(attrs=({'rows': 1, 'cols': 40}))
+    )
+    message = forms.CharField(label="お問い合わせ内容", widget=Textarea)
 
 
 class RequiredFormset(forms.BaseFormSet):
