@@ -42,6 +42,7 @@ Twitterで問題を共有するためのボタン
 問題の解説をつける  
 Vue.jsとWebAPI(Djagno REST Framework)を用いたSPA化  
 インフラのコード化  
+デプロイの自動化  
 テストコードを書く
 
 
