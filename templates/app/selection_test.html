@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <p id='problem_count' class='hidden' data-problem_count='{{ problem|length }}'></p>
+    <p id='problem_count' class='hidden' data-problem_count='{{ problems|length }}'></p>
     {% if problems|length == 0 %}
         <h3>作成された問題がありません</h3>
     {% else %}

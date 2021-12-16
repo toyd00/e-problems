@@ -43,14 +43,15 @@ def signup(request):
 
 
 @login_required
-def show_myPage(request):
-    user = request.user
+def show_myPage(request, pk):
+    user = CustomUser.objects.get(pk=pk)
     making_problem_count = len(user.making_problem.all())
     correct_answer_count = len(user.solving_problem.all())
     incorrect_answer_count = len(Problem.objects.all()) - correct_answer_count
     calTest_result_list = user.calculation_problem_set.all()
 
     context = {
+        'user': user,
         'making_problem_count': making_problem_count,
         'correct_answer_count': correct_answer_count,
         'incorrect_answer_count': incorrect_answer_count,
@@ -80,6 +81,11 @@ def selection_test(request, pk):
     }
     return render(request, 'app/selection_test.html', context)
 
+
+def show_userList(request):
+    all_users = CustomUser.objects.all()
+    context = {'all_users': all_users}
+    return render(request, 'app/user_list.html', context)
 
 #@login_required
 def score_selection_test(request, problem_count):
@@ -125,6 +131,7 @@ def score_calTest(request):
     cal_problem.solving_user.add(request.user)
     cal_problem.save()
     return HttpResponse()
+
 
 
 @login_required
