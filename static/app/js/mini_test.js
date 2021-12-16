@@ -1,5 +1,11 @@
 
 {
+  if ($('#problem_count').data('problem_count') === 0) {
+    $('#choice').attr('class', 'hidden')
+  }
+}
+
+{
   'use strict';
 
   $('.like_button').on('click', function(event) {
