@@ -46,12 +46,14 @@ def signup(request):
 def show_myPage(request):
     user = request.user
     making_problem_count = len(user.making_problem.all())
-    solving_problem_count = len(user.solving_problem.all())
+    correct_answer_count = len(user.solving_problem.all())
+    incorrect_answer_count = len(Problem.objects.all()) - correct_answer_count
     calTest_result_list = user.calculation_problem_set.all()
 
     context = {
         'making_problem_count': making_problem_count,
-        'solving_problem_count': solving_problem_count,
+        'correct_answer_count': correct_answer_count,
+        'incorrect_answer_count': incorrect_answer_count,
         'calTest_result_list': calTest_result_list,
     }
     return render(request, 'app/my_page.html', context)
