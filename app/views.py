@@ -36,11 +36,18 @@ def signup(request):
             )
             if new_user is not None:
                 login(request, new_user)
-                return redirect('app:my_page')
+                return redirect('app:my_page', pk=new_user.pk)
     else:
         form = CustomUserCreationForm()
     return render(request, 'app/signup.html', {'form': form})
 
+def test_login(request):
+    user, is_created = CustomUser.objects.get_or_create(
+        email = 'test@gmail.com',
+        username = 'test'
+    )
+    login(request, user)
+    return redirect('app:my_page', user.pk)
 
 @login_required
 def show_myPage(request, pk):
