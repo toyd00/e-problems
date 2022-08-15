@@ -3,9 +3,6 @@
 ・URL（AWS (EC2, Route53...)＋Nginx（webサーバ）＋ Gunicorn（appサーバ））  
 https://e-problems.net/
 
-・サービスの説明動画  
-https://youtu.be/rdK-0RdWkJg
-
 
 テストアカウント  
 メールアドレス：test@gmail.com  
